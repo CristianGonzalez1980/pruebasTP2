@@ -10,8 +10,7 @@ import java.sql.Connection
 class JDBCPatogenoDAO : PatogenoDAO {
 
     override fun crear(patogeno: Patogeno): Int {
-        TODO("creo un nuevo patogeno")
-        execute { conn: Connection ->
+        return execute { conn: Connection ->
             val ps = conn.prepareStatement("INSERT INTO patogeno (id, cantidadDeEspecies, tipo) VALUES (?,?,?)")
             ps.setInt(1, patogeno.id!!)
             ps.setInt(2, patogeno.cantidadDeEspecies)
@@ -23,17 +22,20 @@ class JDBCPatogenoDAO : PatogenoDAO {
 
             ps.close()
             patogeno.id!!
-
-
-       }
-
-
-
-
+        }
     }
 
     override fun actualizar(patogeno: Patogeno) {
-        TODO("not implemented")
+        execute { conn: Connection ->
+            val ps =
+                    conn.prepareStatement("UPDATE patogeno (cantidadDeEspecies) VALUE patogeno.cantidadDeEspecies WHERE id = patogeno.id")
+            ps.execute()
+            if (ps.updateCount != 1) {
+                throw RuntimeException("No se actualizo el patogeno $patogeno")
+            }
+            ps.close()
+            null
+        }
     }
 
     override fun recuperar(patogenoId: Int): Patogeno {
@@ -49,6 +51,7 @@ class JDBCPatogenoDAO : PatogenoDAO {
                     throw RuntimeException("Existe mas de un patogeno con el id $patogenoId")
                 }
                 patogeno = Patogeno(ps.toString())
+                patogeno.id = patogenoId
                 patogeno.cantidadDeEspecies = resultSet.getInt("cantidadDeEspecies")
             }
             ps.close()
