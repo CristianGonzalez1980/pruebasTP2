@@ -28,10 +28,17 @@ class PatogenoDaoTest {
     }
 
     @Test
+    fun pruebaRecuperar() {
+        var patogeno: Patogeno = dao.recuperar(1)
+        Assert.assertEquals("Virus", patogeno.tipo)
+    }
+
+    @Test
     fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
         var patogeno: Patogeno = dao.recuperar(3)
         patogeno.crearEspecie("VacaLoca", "Reino Unido")
         dao.actualizar(patogeno)
+        //Assert.assertEquals()
         Assert.assertEquals(1, dao.recuperar(3).cantidadDeEspecies)
     }
 
