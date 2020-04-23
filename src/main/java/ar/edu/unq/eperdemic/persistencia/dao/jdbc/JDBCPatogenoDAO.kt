@@ -66,7 +66,7 @@ class JDBCPatogenoDAO : PatogenoDAO {
     }
 
     override fun recuperarATodos(): List<Patogeno> {
-        val listaResultante : List<Patogeno> = emptyList()
+        val listaResultante : ArrayList<Patogeno> = ArrayList(emptyList())
         return execute { conn: Connection ->
             val ps = conn.prepareStatement("SELECT id FROM patogeno")
             val resultSet = ps.executeQuery()
@@ -78,7 +78,7 @@ class JDBCPatogenoDAO : PatogenoDAO {
                 }.toList()
             }
             for (id in list) {
-                listaResultante + this.recuperar(id)
+                listaResultante.add(this.recuperar(id))
             }
             ps.close()
             listaResultante

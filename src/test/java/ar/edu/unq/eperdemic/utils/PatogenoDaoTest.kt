@@ -22,7 +22,7 @@ class PatogenoDaoTest {
     }
 
     @Test
-    fun crerUnCuartoPatogenoSeCorroboraNumeroDeId() {
+    fun crearUnCuartoPatogenoSeCorroboraNumeroDeId() {
         patogenoRaro = Patogeno("Priones")
         Assert.assertEquals(4, dao.crear(patogenoRaro))
     }
