@@ -29,13 +29,13 @@ class PatogenoDaoTest {
 
     @Test
     fun pruebaRecuperar() {
-        var patogeno: Patogeno = dao.recuperar(1)
+        val patogeno: Patogeno = dao.recuperar(1)
         Assert.assertEquals("Virus", patogeno.tipo)
     }
 
     @Test
     fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
-        var patogeno: Patogeno = dao.recuperar(3)
+        val patogeno: Patogeno = dao.recuperar(3)
         patogeno.crearEspecie("VacaLoca", "Reino Unido")
         dao.actualizar(patogeno)
         //Assert.assertEquals()
@@ -44,9 +44,9 @@ class PatogenoDaoTest {
 
     @Test
     fun seRecuperanTodosLosPatogenosSeCorroboraCantidad() {
-        var patogenos: List<Patogeno> = dao.recuperarATodos()
+        val patogenos: List<Patogeno> = dao.recuperarATodos()
         Assert.assertEquals(3, patogenos.size)
-        var patogenos2: List<Patogeno> = patogenos.sortedBy { it.tipo }
+        val patogenos2: List<Patogeno> = patogenos.sortedBy { it.tipo }
         Assert.assertEquals(patogenos, patogenos2)
     }
 

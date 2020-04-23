@@ -66,8 +66,25 @@ class JDBCPatogenoDAO : PatogenoDAO {
     }
 
     override fun recuperarATodos(): List<Patogeno> {
-        TODO("not implemented")
+        val listaResultante : List<Patogeno> = emptyList()
+        return execute { conn: Connection ->
+            val ps = conn.prepareStatement("SELECT id FROM patogeno")
+            val resultSet = ps.executeQuery()
+            val list = resultSet.use {
+                generateSequence {
+                    if (resultSet.next())
+                        resultSet.getInt(1)
+                    else null
+                }.toList()
+            }
+            for (id in list) {
+                listaResultante + this.recuperar(id)
+            }
+            ps.close()
+            listaResultante
+        }
     }
+
 
     init {
         val initializeScript = javaClass.classLoader.getResource("createAll.sql").readText()
