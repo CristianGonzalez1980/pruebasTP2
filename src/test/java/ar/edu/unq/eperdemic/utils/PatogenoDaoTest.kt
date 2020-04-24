@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.assertThrows
+import java.sql.SQLIntegrityConstraintViolationException
 import javax.validation.constraints.AssertTrue
 
 class PatogenoDaoTest {
@@ -27,6 +28,16 @@ class PatogenoDaoTest {
     fun crearUnCuartoPatogenoSeCorroboraNumeroDeId() {
         patogenoRaro = Patogeno("Priones")
         Assert.assertEquals(4, dao.crear(patogenoRaro))
+    }
+    @Test
+    fun crearUnQuintoPatogenoConUnTipoYaExistenteYNoMeLoPermite() {
+        try {
+            patogenoRaro = Patogeno("Virus")
+            Assert.assertEquals(5, dao.crear(patogenoRaro))
+        }catch(e:Exception) {
+            assertThrows<SQLIntegrityConstraintViolationException> { dao.crear(patogenoRaro) }
+        }
+
     }
 
     @Test
