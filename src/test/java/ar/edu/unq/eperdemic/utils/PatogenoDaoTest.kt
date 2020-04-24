@@ -8,6 +8,8 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.assertThrows
 import javax.validation.constraints.AssertTrue
 
 class PatogenoDaoTest {
@@ -28,17 +30,39 @@ class PatogenoDaoTest {
     }
 
     @Test
+    fun pruebaRecuperarPatogenoQueNoFueCreadoYMeRespondeQueEsNulo() {
+        try {
+            patogenoRaro = Patogeno("Priones")
+            val patogeno: Patogeno = dao.recuperar(4)
+            Assert.assertEquals("Priones", patogeno.tipo)
+        }catch(e:Exception) {
+            assertThrows<NullPointerException> { dao.recuperar(4) }
+        }
+    }
+
+    @Test
     fun pruebaRecuperar() {
         val patogeno: Patogeno = dao.recuperar(1)
         Assert.assertEquals("Virus", patogeno.tipo)
     }
 
     @Test
+    fun crearUnPatogenoCuandoLoActualizoMeRespondeQueNoPuedeSerActualizado(){
+       try{
+                patogenoRaro= Patogeno("Covid")
+                patogenoRaro.cantidadDeEspecies = 1
+                var idPatogeno= dao.crear(patogenoRaro)
+                println(dao.actualizar(patogenoRaro))
+           Assert.assertEquals(0, dao.recuperar(idPatogeno).cantidadDeEspecies)
+       }catch(e:Exception) {
+           assertThrows<Exception> { dao.actualizar(patogenoRaro) }
+       }
+    }
+    @Test
     fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
         val patogeno: Patogeno = dao.recuperar(3)
         patogeno.crearEspecie("VacaLoca", "Reino Unido")
         dao.actualizar(patogeno)
-        //Assert.assertEquals()
         Assert.assertEquals(1, dao.recuperar(3).cantidadDeEspecies)
     }
 
@@ -47,6 +71,7 @@ class PatogenoDaoTest {
         val patogenos: List<Patogeno> = dao.recuperarATodos()
         Assert.assertEquals(3, patogenos.size)
         val patogenos2: List<Patogeno> = patogenos.sortedBy { it.tipo }
+        println(patogenos2)
         Assert.assertEquals(patogenos, patogenos2)
     }
 

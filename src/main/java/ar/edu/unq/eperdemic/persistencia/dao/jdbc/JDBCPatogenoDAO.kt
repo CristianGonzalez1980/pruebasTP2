@@ -3,9 +3,12 @@ package ar.edu.unq.eperdemic.persistencia.dao.jdbc
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.persistencia.dao.jdbc.JDBCConnector.execute
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json
 import java.sql.Connection
 import java.sql.Statement
 import java.sql.ResultSet
+import java.util.logging.Handler
+import javax.naming.Context
 
 
 class JDBCPatogenoDAO : PatogenoDAO {
@@ -31,38 +34,45 @@ class JDBCPatogenoDAO : PatogenoDAO {
     }
 
     override fun actualizar(patogeno: Patogeno)  {
-        execute { conn: Connection ->
-            val ps =
-                    conn.prepareStatement("UPDATE patogeno SET cantidadDeEspecies = ? WHERE id = ?")
-            ps.setInt(1, patogeno.cantidadDeEspecies)
-            ps.setInt(2, patogeno.id!!)
-            ps.execute()
-            if (ps.updateCount != 1) {
-                throw RuntimeException("No se actualizo el patogeno $patogeno")
+        try {
+            execute { conn: Connection ->
+                val ps =
+                        conn.prepareStatement("UPDATE patogeno SET cantidadDeEspecies = ? WHERE id = ?")
+                ps.setInt(1, patogeno.cantidadDeEspecies)
+                ps.setInt(2, patogeno.id!!)
+                ps.execute()
+                if (ps.updateCount != 1) {
+
+                }
+                ps.close()
             }
-            ps.close()
+        } catch (e:Exception){
+            throw RuntimeException("No se actualizo el patogeno $patogeno")
         }
     }
 
     override fun recuperar(patogenoId: Int): Patogeno {
-        return execute { conn: Connection ->
-            val ps = conn.prepareStatement("SELECT cantidadDeEspecies, tipo FROM patogeno WHERE id = ?")
-            ps.setInt(1, patogenoId)
-            val resultSet = ps.executeQuery()
-            var patogeno: Patogeno? = null
-            while (resultSet.next()) {
-                //si patogeno no es null aca significa que el while dio mas de una vuelta, eso
-                //suele pasar cuando el resultado (resultset) tiene mas de un elemento.
-                if (patogeno != null) {
-                    throw RuntimeException("Existe mas de un patogeno con el id $patogenoId")
-                }
-                patogeno = Patogeno(resultSet.getString("tipo"))
-                patogeno.id = patogenoId
-                patogeno.cantidadDeEspecies = resultSet.getInt("cantidadDeEspecies")
-            }
-            ps.close()
-            patogeno!!
-        }
+           return execute { conn: Connection ->
+               val ps = conn.prepareStatement("SELECT cantidadDeEspecies, tipo FROM patogeno WHERE id = ?")
+               ps.setInt(1, patogenoId)
+               val resultSet = ps.executeQuery()
+               var patogeno: Patogeno? = null
+
+               while (resultSet.next()) {
+                   //si patogeno no es null aca significa que el while dio mas de una vuelta, eso
+                   //suele pasar cuando el resultado (resultset) tiene mas de un elemento.
+                   if (patogeno != null) {
+                       throw RuntimeException("No existe ningun patogeno con el id $patogenoId")
+
+                   }
+                   patogeno = Patogeno(resultSet.getString("tipo"))
+                   patogeno.id = patogenoId
+                   patogeno.cantidadDeEspecies = resultSet.getInt("cantidadDeEspecies")
+               }
+               ps.close()
+               patogeno!!
+           }
+
     }
 
     override fun recuperarATodos(): List<Patogeno> {
