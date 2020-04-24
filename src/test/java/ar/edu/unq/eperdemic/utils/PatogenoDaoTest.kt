@@ -51,7 +51,7 @@ class PatogenoDaoTest {
        try{
                 patogenoRaro= Patogeno("Covid")
                 patogenoRaro.cantidadDeEspecies = 1
-                var idPatogeno= dao.crear(patogenoRaro)
+                val idPatogeno= dao.crear(patogenoRaro)
                 println(dao.actualizar(patogenoRaro))
            Assert.assertEquals(0, dao.recuperar(idPatogeno).cantidadDeEspecies)
        }catch(e:Exception) {
@@ -70,9 +70,6 @@ class PatogenoDaoTest {
     fun seRecuperanTodosLosPatogenosSeCorroboraCantidad() {
         val patogenos: List<Patogeno> = dao.recuperarATodos()
         Assert.assertEquals(3, patogenos.size)
-        val patogenos2: List<Patogeno> = patogenos.sortedBy { it.tipo }
-        println(patogenos2)
-        Assert.assertEquals(patogenos, patogenos2)
     }
 
     @After

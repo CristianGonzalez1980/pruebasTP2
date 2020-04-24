@@ -76,25 +76,22 @@ class JDBCPatogenoDAO : PatogenoDAO {
     }
 
     override fun recuperarATodos(): List<Patogeno> {
-        val listaResultante : ArrayList<Patogeno> = ArrayList(emptyList())
-        return execute { conn: Connection ->
-            val ps = conn.prepareStatement("SELECT id FROM patogeno")
+        return execute { conn:
+            Connection ->
+            val ps =
+            conn.prepareStatement("SELECT id, tipo, cantidadDeEspecies FROM patogeno")
             val resultSet = ps.executeQuery()
-            val list = resultSet.use {
-                generateSequence {
-                    if (resultSet.next())
-                        resultSet.getInt(1)
-                    else null
-                }.toList()
-            }
-            for (id in list) {
-                listaResultante.add(this.recuperar(id))
+            val patogenos: MutableList<Patogeno> = mutableListOf()
+            while (resultSet.next()){
+                val patogeno = Patogeno(resultSet.getString("tipo"))
+                patogeno.id = resultSet.getInt("id")
+                patogeno.cantidadDeEspecies = resultSet.getInt("cantidadDeEspecies")
+                patogenos.add(patogeno)
             }
             ps.close()
-            listaResultante
+            patogenos.sortedBy { it.tipo }
         }
     }
-
 
     init {
         val initializeScript = javaClass.classLoader.getResource("createAll.sql").readText()
