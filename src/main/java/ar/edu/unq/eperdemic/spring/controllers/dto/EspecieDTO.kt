@@ -9,10 +9,13 @@ class EspecieDTO (val nombre : String,
 
     companion object {
         fun from(especie:Especie) =
-                EspecieDTO(especie.nombre,
-                        especie.paisDeOrigen,
-                        especie.patogeno.id)
+                especie.patogeno.id?.let {
+                    EspecieDTO(especie.nombre,
+                            especie.paisDeOrigen,
+                            it)
+                }
     }
+
 
 }
 

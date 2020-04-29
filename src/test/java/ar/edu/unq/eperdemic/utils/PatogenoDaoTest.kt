@@ -1,8 +1,11 @@
 package ar.edu.unq.eperdemic.utils
-
+/*
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
-import ar.edu.unq.eperdemic.persistencia.dao.jdbc.JDBCPatogenoDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
+import ar.edu.unq.eperdemic.services.PatogenoService
+import ar.edu.unq.eperdemic.services.runner.PatogenoServiceImp
 import ar.edu.unq.eperdemic.utils.jdbc.DataServiceJDBC
 import org.junit.After
 import org.junit.Assert
@@ -15,14 +18,19 @@ import javax.validation.constraints.AssertTrue
 
 class PatogenoDaoTest {
 
-    private val dao: PatogenoDAO = JDBCPatogenoDAO()
-    private val modelo: DataService = DataServiceJDBC()
+    lateinit var service: PatogenoService
     lateinit var patogenoRaro: Patogeno
+
+
+    /*private val modelo: DataService = DataServiceJDBC()
+    lateinit var patogenoRaro: Patogeno*/
 
     @Before
     fun crearModelo() {
-        modelo.crearSetDeDatosIniciales()
-    }
+        this.service = PatogenoServiceImp(
+                HibernatePatogenoDAO(),
+                HibernateDataDAO()
+        )    }
 
     @Test
     fun crearUnCuartoPatogenoSeCorroboraNumeroDeId() {
@@ -82,9 +90,9 @@ class PatogenoDaoTest {
         val patogenos: List<Patogeno> = dao.recuperarATodos()
         Assert.assertEquals(3, patogenos.size)
     }
-
+/*
     @After
     fun emilinarModelo() {
         modelo.eliminarTodo()
-    }
-}
+    }*/
+}*/

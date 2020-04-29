@@ -1,12 +1,10 @@
 package ar.edu.unq.eperdemic
 
 import ar.edu.unq.eperdemic.modelo.Patogeno
-import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
-import ar.edu.unq.eperdemic.persistencia.dao.jdbc.JDBCPatogenoDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
 import ar.edu.unq.eperdemic.services.PatogenoService
-import ar.edu.unq.eperdemic.services.impl.PatogenoServiceImpl
-import ar.edu.unq.eperdemic.utils.DataService
-import ar.edu.unq.eperdemic.utils.jdbc.DataServiceJDBC
+import ar.edu.unq.eperdemic.services.runner.PatogenoServiceImp
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -14,37 +12,40 @@ import org.junit.Test
 
 
 class PatogenoServiceTest {
-    private val dao: PatogenoDAO = JDBCPatogenoDAO()
-    private val serviceDao: PatogenoService = PatogenoServiceImpl(dao)
-    private val modelo: DataService = DataServiceJDBC()
-    lateinit var patogenoRaro: Patogeno
+
+    lateinit var service: PatogenoService
+    lateinit var patogeno: Patogeno
+
 
 
     @Before
     fun crearModelo() {
-        modelo.crearSetDeDatosIniciales()
+        this.service = PatogenoServiceImp(
+                HibernatePatogenoDAO(),
+                HibernateDataDAO()
+        )
     }
 
     @Test
     fun crerUnCuartoPatogenoSeCorroboraNumeroDeId() {
-        patogenoRaro = Patogeno("Priones")
-        patogenoRaro.id = serviceDao.crearPatogeno(patogenoRaro)
-        Assert.assertEquals(4, patogenoRaro.id )
+        patogeno = Patogeno("Priones")
+        val id = service.crearPatogeno(patogeno)
+        Assert.assertEquals(4, id )
     }
 
     @Test
     fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
-        serviceDao.agregarEspecie(3, "VacaLoca", "Reino Unido")
-        Assert.assertEquals(1, serviceDao.recuperarPatogeno(3).cantidadDeEspecies)
+        service.agregarEspecie(3, "VacaLoca", "Reino Unido")
+        Assert.assertEquals(1, service.recuperarPatogeno(3).cantidadDeEspecies)
     }
 
     @Test
     fun seRecuperanTodosLosPatogenosSeCorroboraCantidad() {
-        Assert.assertEquals(3, serviceDao.recuperarATodosLosPatogenos().size)
+        Assert.assertEquals(3, service.recuperarATodosLosPatogenos().size)
     }
 
-    @After
+    /*@After
     fun emilinarModelo() {
         modelo.eliminarTodo()
-    }
+    }*/
 }
