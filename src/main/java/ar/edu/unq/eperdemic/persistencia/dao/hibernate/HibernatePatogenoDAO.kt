@@ -5,7 +5,8 @@ import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 
 open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), PatogenoDAO {
-    override fun recuperarATodos(): List<Patogeno> {
+
+    override val recuperarATodos: Collection<Patogeno> get(){
 
         val session = TransactionRunner.currentSession
 
@@ -29,10 +30,10 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
 
             val session = TransactionRunner.currentSession
 
-            val hql = ("select id cantidadDeEspecies from patogeno p " + "where p.id = :unId ")
+            val hql = ("select id cantidadDeEspecies from patogeno " + "where id = :unId ")
 
             val query = session.createQuery(hql, Patogeno::class.java)
-            query.setParameter("id",unPatogeno.id)
+            query.setParameter("unId",unPatogeno.id)
 
             query.setParameter("cantidadDeEspecies",unPatogeno.cantidadDeEspecies)
 
@@ -42,11 +43,7 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
             val session = TransactionRunner.currentSession
             session.save(patogeno)
 
-           /* val hql = ("select id from patogeno" + "where tipo = :unTipo ")
-            val query = session.createQuery(hql, Patogeno::class.java)
-            query.setParameter("unTipo",patogeno.tipo)*/
-
-            return (session.get(Patogeno::class.java,patogeno.tipo)).id!!
+            return (session.get(Patogeno::class.java,patogeno.id)).id!!
 
 
         }

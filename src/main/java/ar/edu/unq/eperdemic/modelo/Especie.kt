@@ -16,8 +16,7 @@ class Especie(unPatogeno: Patogeno,
 
 
 
-    @ManyToOne
-    var owner: Patogeno? = null
-
+   /*@ManyToOne
+    var owner: Patogeno? = null*/
 
 }

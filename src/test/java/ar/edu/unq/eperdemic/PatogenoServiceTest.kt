@@ -15,6 +15,9 @@ class PatogenoServiceTest {
 
     lateinit var service: PatogenoService
     lateinit var patogeno: Patogeno
+    lateinit var patogeno2: Patogeno
+    lateinit var patogeno3: Patogeno
+
 
 
 
@@ -30,21 +33,33 @@ class PatogenoServiceTest {
     fun crerUnCuartoPatogenoSeCorroboraNumeroDeId() {
         patogeno = Patogeno("Priones")
         val id = service.crearPatogeno(patogeno)
-        Assert.assertEquals(4, id )
+
+        Assert.assertEquals(1, id )
     }
 
     @Test
     fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
-        service.agregarEspecie(3, "VacaLoca", "Reino Unido")
-        Assert.assertEquals(1, service.recuperarPatogeno(3).cantidadDeEspecies)
+        patogeno = Patogeno("Virus")
+        val id = service.crearPatogeno(patogeno)
+       println(patogeno)
+        println(service.recuperarPatogeno(id))
+
+        Assert.assertEquals(patogeno.tipo, service.recuperarPatogeno(id).tipo)
     }
 
     @Test
     fun seRecuperanTodosLosPatogenosSeCorroboraCantidad() {
-        Assert.assertEquals(3, service.recuperarATodosLosPatogenos().size)
+        patogeno = Patogeno("Hongo")
+        service.crearPatogeno(patogeno)
+        /*patogeno2 = Patogeno("bbbbb")
+        service.crearPatogeno(patogeno2)
+        patogeno3 = Patogeno("jkhkhkhkk")
+         service.crearPatogeno(patogeno3)*/
+
+        Assert.assertEquals(null, service.recuperarATodosLosPatogenos().size)
     }
 
-    /*@After
+   /* @After
     fun emilinarModelo() {
         modelo.eliminarTodo()
     }*/
