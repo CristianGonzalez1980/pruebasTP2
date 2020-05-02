@@ -5,6 +5,7 @@ import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.UbicacionDAO
 import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
 import ar.edu.unq.eperdemic.services.UbicacionService
+import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 
 class UbicacionServiceImp(
         private val ubicacionDAO: UbicacionDAO,
@@ -19,6 +20,11 @@ class UbicacionServiceImp(
     }
 
     override fun crearUbicacion(nombreUbicacion: String): Ubicacion {
-        TODO("Not yet implemented")
+        return runTrx {
+            val ubicacion: Ubicacion = Ubicacion(nombreUbicacion)
+            ubicacionDAO.crear(ubicacion) }
+    }
+    public fun clear() {
+        runTrx { dataDAO.clear() }
     }
 }

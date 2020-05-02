@@ -16,7 +16,8 @@ class Patogeno(){
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var especies: MutableSet<Especie> = HashSet()
 
-//    var cantidadDeEspecies: Int = this.especies.size
+    val cantidadDeEspecies: Int
+        get() = especies.size
 
     constructor(unTipo: String) : this() {
 
