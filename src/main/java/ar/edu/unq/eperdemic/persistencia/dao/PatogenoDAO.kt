@@ -7,5 +7,5 @@ interface PatogenoDAO {
     fun crear(patogeno: Patogeno): Int
     fun actualizar(patogeno: Patogeno )
     fun recuperar(idDelPatogeno: Int): Patogeno
-    val recuperarATodos : Collection<Patogeno>
+    fun recuperarATodos() : List<Patogeno>
 }

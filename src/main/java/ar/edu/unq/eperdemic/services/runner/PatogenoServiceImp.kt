@@ -11,6 +11,7 @@ class PatogenoServiceImp(
         private val patogenoDAO: PatogenoDAO,
         private val dataDAO: DataDAO
 ) : PatogenoService {
+
     override fun recuperarEspecie(id: Int): Especie {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -39,7 +40,7 @@ class PatogenoServiceImp(
     }
     override fun recuperarATodosLosPatogenos(): Collection<Patogeno>{
 
-        return runTrx { patogenoDAO.recuperarATodos}
+        return runTrx { patogenoDAO.recuperarATodos()}
     }
 
     fun clear() {

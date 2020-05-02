@@ -1,22 +1,26 @@
 package ar.edu.unq.eperdemic.modelo
-
 import javax.persistence.*
 
 @Entity
-class Especie(unPatogeno: Patogeno,
-              unNombre: String,
-              unPaisDeOrigen: String) {
+class Especie() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var nombre: String = unNombre
-    @Column(nullable = false, length = 500)
-    var patogeno: Patogeno = unPatogeno
-    var paisDeOrigen: String = unPaisDeOrigen
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
+    var nombre: String? = null
+    var paisDeOrigen: String? = null
 
+    @ManyToOne
+    var owner: Patogeno? = null
 
+    constructor(owner: Patogeno, nombre: String, paisDeOrigen: String) : this() {
+        this.owner = owner
+        this.nombre = nombre
+        this.paisDeOrigen = paisDeOrigen
+    }
 
-   /*@ManyToOne
-    var owner: Patogeno? = null*/
+    override fun toString(): String {
+        return nombre!!
+    }
+
 
 }

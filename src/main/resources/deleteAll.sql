@@ -1,1 +1,0 @@
-DROP DATABASE IF EXISTS epers_tp1_jdbc
