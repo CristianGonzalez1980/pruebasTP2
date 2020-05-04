@@ -30,7 +30,7 @@ class PatogenoServiceTest {
     }
 
     @Test
-    fun crerUnCuartoPatogenoSeCorroboraNumeroDeId() {
+    fun crearUnPatogenoYCorroborarId() {
         patogeno = Patogeno("Priones")
         val id = service.crearPatogeno(patogeno)
 
@@ -41,14 +41,14 @@ class PatogenoServiceTest {
     fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
         patogeno = Patogeno("Virus")
         val id = service.crearPatogeno(patogeno)
-       println(patogeno)
+        println(patogeno)
         println(service.recuperarPatogeno(id))
 
         Assert.assertEquals(patogeno.tipo, service.recuperarPatogeno(id).tipo)
     }
 
     @Test
-    fun seRecuperanTodosLosPatogenosSeCorroboraCantidad() {
+    fun recuperarTodosLosPatogenosYCorroborarCantidad() {
         patogeno = Patogeno("Hongo")
         service.crearPatogeno(patogeno)
         /*patogeno2 = Patogeno("bbbbb")
@@ -56,7 +56,7 @@ class PatogenoServiceTest {
         patogeno3 = Patogeno("jkhkhkhkk")
          service.crearPatogeno(patogeno3)*/
 
-        Assert.assertEquals(null, service.recuperarATodosLosPatogenos().size)
+        Assert.assertEquals(3, service.recuperarATodosLosPatogenos().size)
     }
 
    /* @After

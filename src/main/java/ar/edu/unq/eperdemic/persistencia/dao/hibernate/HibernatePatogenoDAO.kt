@@ -4,13 +4,12 @@ import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 
+
 open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), PatogenoDAO {
 
     override fun recuperarATodos(): List<Patogeno> {
         val session = TransactionRunner.currentSession
-
         val hql = ("from patogeno p " + "order by p.tipo asc")
-
         val query = session.createQuery(hql, Patogeno::class.java)
         return query.resultList
     }

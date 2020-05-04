@@ -4,7 +4,8 @@ import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
-@Entity
+@Entity(name = "patogeno")
+@Table(name = "patogeno")
 class Patogeno(){
 
     @Id
