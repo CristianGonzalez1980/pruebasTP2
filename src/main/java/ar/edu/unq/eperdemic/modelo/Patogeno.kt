@@ -46,4 +46,10 @@ class Patogeno(){
         return nuevaEspecie
 
     }
+
+    fun agregarEspecie(especie: Especie) {
+
+        this.especies.add(especie)
+
+    }
 }

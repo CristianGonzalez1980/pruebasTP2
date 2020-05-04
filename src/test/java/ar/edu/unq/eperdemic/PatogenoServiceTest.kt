@@ -1,5 +1,6 @@
 package ar.edu.unq.eperdemic
 
+import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
@@ -38,29 +39,52 @@ class PatogenoServiceTest {
     }
 
     @Test
-    fun seAgregaUnaEspecieSeCorroboraLaActualizacionDelPatogeno() {
+    fun seCreaUnPatogenoYLuegoAlRecuperarUnPatogenoVerificoQueSeaElMismo() {
         patogeno = Patogeno("Virus")
         val id = service.crearPatogeno(patogeno)
-        println(patogeno)
-        println(service.recuperarPatogeno(id))
 
         Assert.assertEquals(patogeno.tipo, service.recuperarPatogeno(id).tipo)
     }
 
     @Test
+    fun seAgregaUnaEspecieAUnPatogenoYSeCorroboraQueSeAllaAgregado() {
+        patogeno = Patogeno("Covid")
+        val id = service.crearPatogeno(patogeno)
+        val especie = service.agregarEspecie(id,"Rojo","Mexico")
+        val patogenoRecuperado = service.recuperarPatogeno(id)
+
+
+        Assert.assertEquals(patogenoRecuperado, especie.owner)
+
+    }
+    @Test
     fun recuperarTodosLosPatogenosYCorroborarCantidad() {
         patogeno = Patogeno("Hongo")
         service.crearPatogeno(patogeno)
-        /*patogeno2 = Patogeno("bbbbb")
+        patogeno2 = Patogeno("Covid")
         service.crearPatogeno(patogeno2)
-        patogeno3 = Patogeno("jkhkhkhkk")
-         service.crearPatogeno(patogeno3)*/
+        patogeno3 = Patogeno("Priones")
+         service.crearPatogeno(patogeno3)
 
         Assert.assertEquals(3, service.recuperarATodosLosPatogenos().size)
     }
 
-   /* @After
-    fun emilinarModelo() {
-        modelo.eliminarTodo()
-    }*/
+    @Test
+    fun seAgregaUnaEspecieAUnPatogenoYLuegoSeRecuperaEsaEspecie() {
+        patogeno = Patogeno("1-12")
+        val id = service.crearPatogeno(patogeno)
+        service.agregarEspecie(id,"cruza","Ecuador")
+        val patogenoRecuperado = service.recuperarPatogeno(id)
+
+
+        Assert.assertEquals(patogenoRecuperado.id, (service.recuperarEspecie(id).owner)!!.id)
+
+    }
+
+    @After
+    fun cleanup() {
+
+        service.clear()
+    }
+
 }

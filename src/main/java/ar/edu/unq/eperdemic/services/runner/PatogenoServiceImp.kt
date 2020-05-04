@@ -13,7 +13,8 @@ class PatogenoServiceImp(
 ) : PatogenoService {
 
     override fun recuperarEspecie(id: Int): Especie {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        return kotlin.run { patogenoDAO.recuperarEspecie(id) }
     }
 
     override fun esPandemia(especieId: Int): Boolean {
@@ -26,8 +27,7 @@ class PatogenoServiceImp(
 
     override fun agregarEspecie(id: Int, nombreEspecie: String, paisDeOrigen: String): Especie {
 
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
+        return  runTrx { patogenoDAO.agregarEspecie(id,nombreEspecie,paisDeOrigen) }
     }
 
     override fun crearPatogeno(patogeno: Patogeno): Int{
@@ -43,7 +43,7 @@ class PatogenoServiceImp(
         return runTrx { patogenoDAO.recuperarATodos()}
     }
 
-    fun clear() {
+    override fun clear() {
         runTrx { dataDAO.clear() }
     }
 }

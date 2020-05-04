@@ -1,11 +1,39 @@
 package ar.edu.unq.eperdemic.persistencia.dao.hibernate
 
+import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 
 
 open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), PatogenoDAO {
+
+    override fun recuperarEspecie(id: Int): Especie {
+        var patogeno = this.recuperar(id)
+
+        val session = TransactionRunner.currentSession
+        val hql = ("from especie " + " where owner = unPatogeno")
+        val query = session.createQuery(hql, Especie::class.java)
+        query.setParameter("unPatogeno", patogeno)
+        return query.singleResult
+
+
+
+
+
+
+    }
+
+    override fun agregarEspecie(idPatogeno: Int, nombreEspecie: String, paisDeOrigen: String): Especie {
+        var patogeno = this.recuperar(idPatogeno)
+        val especie = Especie(patogeno,nombreEspecie,paisDeOrigen)
+        patogeno.agregarEspecie(especie)
+
+        val session = TransactionRunner.currentSession
+        session.save(especie)
+        return especie
+
+    }
 
     override fun recuperarATodos(): List<Patogeno> {
         val session = TransactionRunner.currentSession
