@@ -17,7 +17,8 @@ class Especie(): Serializable {
 
     var adn: Int? = null  //Una especie obtendra 1 de ADN cada 5 personas infectadas, FALTA IMPLEMENTAR
 
-    var mutaciones: MutableList<Mutacion>? = mutableListOf<Mutacion>()
+    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    val mutaciones: MutableList<Mutacion> = ArrayList()
 
     fun tieneMutaciones(mutaciones: List<Mutacion>) : Boolean {         //Corrobora que la especie tenga las mutaciones
         var resultado = true                                            // que requiere la nueva mutacion a adquirir
@@ -30,7 +31,7 @@ class Especie(): Serializable {
     fun agregarMutacion(unaMutacion: Mutacion) {
         if ((this.adn!! >= unaMutacion.getAdnNecesario()!!) && this.tieneMutaciones(unaMutacion.mutacionesNecesarias())) {
             this.adn = (this.adn!! - unaMutacion.getAdnNecesario()!!)
-            this.mutaciones?.add(unaMutacion)
+            this.mutaciones.add(unaMutacion)
         }
     }
 
