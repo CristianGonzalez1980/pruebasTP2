@@ -21,8 +21,8 @@ class PatogenoControllerREST(private val patogenoService: PatogenoService) {
   }
 
   @PostMapping("/{id}")
-  fun agregarEspecie(@PathVariable id: Int, @RequestBody especieDTO: EspecieDTO): ResponseEntity<EspecieDTO> {
-    val especie = patogenoService.agregarEspecie(id, especieDTO.nombre, especieDTO.paisDeOrigen)
+  fun agregarEspecie(@PathVariable id: Int, @RequestBody especieDTO: EspecieDTO, @RequestBody adn: Int): ResponseEntity<EspecieDTO> {
+    val especie = patogenoService.agregarEspecie(id, especieDTO.nombre, especieDTO.paisDeOrigen, especieDTO.adn)
     val dto = EspecieDTO.from(especie)
     return ResponseEntity(dto, HttpStatus.OK)
   }

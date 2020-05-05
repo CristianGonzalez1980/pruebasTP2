@@ -25,9 +25,9 @@ class PatogenoServiceImp(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun agregarEspecie(id: Int, nombreEspecie: String, paisDeOrigen: String): Especie {
+    override fun agregarEspecie(id: Int, nombreEspecie: String, paisDeOrigen: String, adn: Int): Especie {
 
-        return  runTrx { patogenoDAO.agregarEspecie(id,nombreEspecie,paisDeOrigen) }
+        return  runTrx { patogenoDAO.agregarEspecie(id,nombreEspecie,paisDeOrigen, adn) }
     }
 
     override fun crearPatogeno(patogeno: Patogeno): Int{

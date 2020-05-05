@@ -4,7 +4,8 @@ import ar.edu.unq.eperdemic.modelo.Especie
 
 class EspecieDTO (val nombre : String,
                   val paisDeOrigen: String,
-                  val patogenoId: Int){
+                  val patogenoId: Int,
+                  val adn: Int){
 
 
     companion object {
@@ -12,7 +13,7 @@ class EspecieDTO (val nombre : String,
                 especie.owner!!.id?.let {
                     EspecieDTO(especie.nombre!!,
                             especie.paisDeOrigen!!,
-                            it.toInt())
+                            it.toInt(), especie.adn!!.toInt())
                 }
     }
 

@@ -10,23 +10,16 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
 
     override fun recuperarEspecie(id: Int): Especie {
         var patogeno = this.recuperar(id)
-
         val session = TransactionRunner.currentSession
         val hql = ("from especie " + " where owner = unPatogeno")
         val query = session.createQuery(hql, Especie::class.java)
         query.setParameter("unPatogeno", patogeno)
         return query.singleResult
-
-
-
-
-
-
     }
 
-    override fun agregarEspecie(idPatogeno: Int, nombreEspecie: String, paisDeOrigen: String): Especie {
+    override fun agregarEspecie(idPatogeno: Int, nombreEspecie: String, paisDeOrigen: String, adn: Int): Especie {
         var patogeno = this.recuperar(idPatogeno)
-        val especie = Especie(patogeno,nombreEspecie,paisDeOrigen)
+        val especie = Especie(patogeno,nombreEspecie,paisDeOrigen, adn)
         patogeno.agregarEspecie(especie)
 
         val session = TransactionRunner.currentSession
