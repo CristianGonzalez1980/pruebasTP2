@@ -19,9 +19,6 @@ class PatogenoServiceTest {
     lateinit var patogeno2: Patogeno
     lateinit var patogeno3: Patogeno
 
-
-
-
     @Before
     fun crearModelo() {
         this.service = PatogenoServiceImp(
@@ -47,12 +44,11 @@ class PatogenoServiceTest {
     }
 
     @Test
-    fun seAgregaUnaEspecieAUnPatogenoYSeCorroboraQueSeAllaAgregado() {
+    fun seAgregaUnaEspecieAUnPatogenoYSeCorroboraQueSeHallaAgregado() {
         patogeno = Patogeno("Covid")
         val id = service.crearPatogeno(patogeno)
         val especie = service.agregarEspecie(id,"Rojo","Mexico")
         val patogenoRecuperado = service.recuperarPatogeno(id)
-
 
         Assert.assertEquals(patogenoRecuperado, especie.owner)
 
@@ -70,20 +66,18 @@ class PatogenoServiceTest {
     }
 
     @Test
-    fun seAgregaUnaEspecieAUnPatogenoYLuegoSeRecuperaEsaEspecie() {
+    fun agregarEspecieAPatogenoYRecuperarEspecie() {
         patogeno = Patogeno("1-12")
         val id = service.crearPatogeno(patogeno)
         service.agregarEspecie(id,"cruza","Ecuador")
         val patogenoRecuperado = service.recuperarPatogeno(id)
-
-
+        //revisar la implementacion de recuperarEspecie segun lo que pide el enunciado
         Assert.assertEquals(patogenoRecuperado.id, (service.recuperarEspecie(id).owner)!!.id)
 
     }
 
     @After
     fun cleanup() {
-
         service.clear()
     }
 

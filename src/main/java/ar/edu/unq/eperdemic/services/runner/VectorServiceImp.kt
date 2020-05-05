@@ -5,6 +5,7 @@ import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
 import ar.edu.unq.eperdemic.services.VectorService
+import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 
 class VectorServiceImp (
     private val vectorDAO: VectorDAO,
@@ -24,15 +25,15 @@ class VectorServiceImp (
     }
 
     override fun crearVector(vector: Vector): Vector {
-        TODO("Not yet implemented")
+        return runTrx { vectorDAO.crear(vector) }
     }
 
     override fun recuperarVector(vectorId: Int): Vector {
-        TODO("Not yet implemented")
+        return runTrx { vectorDAO.recuperar(vectorId) }
     }
 
     override fun borrarVector(vectorId: Int) {
-        TODO("Not yet implemented")
+        runTrx { vectorDAO.eliminar(vectorId) }
     }
 
 

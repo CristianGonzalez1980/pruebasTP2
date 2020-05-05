@@ -20,9 +20,17 @@ class Patogeno(){
     val cantidadDeEspecies: Int
         get() = especies.size
 
-    constructor(unTipo: String) : this() {
+    var capacidadContagio: Int? = null
 
+    var defensa: Int? = null
+
+    var letalidad: Int? = null
+
+    constructor(unTipo: String, unaCapacidad: Int, unaDefensa: Int, unaLetalidad: Int) : this() {
         this.tipo = unTipo
+        this.capacidadContagio = unaCapacidad
+        this.defensa = unaDefensa
+        this.letalidad = unaLetalidad
     }
 
     override fun equals(o: Any?): Boolean {

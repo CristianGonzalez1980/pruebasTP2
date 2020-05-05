@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity(name = "especie")
 @Table(name = "especie")
-class Especie(): Serializable{
+class Especie(): Serializable {
 
     @Id
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
@@ -15,10 +15,30 @@ class Especie(): Serializable{
     @ManyToOne
     var owner: Patogeno? = null
 
-    constructor(owner: Patogeno, nombre: String, paisDeOrigen: String) : this() {
+    var adn: Int? = null  //Una especie obtendra 1 de ADN cada 5 personas infectadas, FALTA IMPLEMENTAR
+
+    var mutaciones: MutableList<Mutacion>? = mutableListOf<Mutacion>()
+
+    fun tieneMutaciones(mutaciones: List<Mutacion>) : Boolean {         //Corrobora que la especie tenga las mutaciones
+        var resultado = true                                            // que requiere la nueva mutacion a adquirir
+        for (mutacion: Mutacion in mutaciones){
+            resultado = (resultado and this.mutaciones!!.contains(mutacion))
+        }
+        return resultado
+    }
+
+    fun agregarMutacion(unaMutacion: Mutacion) {
+        if ((this.adn!! >= unaMutacion.getAdnNecesario()!!) && this.tieneMutaciones(unaMutacion.mutacionesNecesarias())) {
+            this.adn = (this.adn!! - unaMutacion.getAdnNecesario()!!)
+            this.mutaciones?.add(unaMutacion)
+        }
+    }
+
+    constructor(owner: Patogeno, nombre: String, paisDeOrigen: String, cantidadAdn: Int) : this() {
         this.owner = owner
         this.nombre = nombre
         this.paisDeOrigen = paisDeOrigen
+        this.adn = cantidadAdn
     }
 
     override fun toString(): String {
@@ -35,7 +55,4 @@ class Especie(): Serializable{
     override fun hashCode(): Int {
         return Objects.hash(owner!!.id)
     }
-
-
-
 }
