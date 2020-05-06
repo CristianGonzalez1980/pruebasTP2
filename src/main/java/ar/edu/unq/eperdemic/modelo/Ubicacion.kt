@@ -29,6 +29,11 @@ class Ubicacion() {
         vector.location = this
     }
 
+    fun desAlojarVector(vector: Vector) {
+        this.vectores.remove(vector)
+        vector.location = null
+    }
+
     override fun toString(): String {
         return nombreDeLaUbicacion!!
     }
