@@ -1,6 +1,8 @@
 package ar.edu.unq.eperdemic.modelo.StrategyVectores
 
 
-open class StrategySuperClase() {
-
+abstract class StrategySuperClase() {
+    fun poneEnRiesgoA(vectorRecibido: Vector)
+    fun tipo()
+    fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector) : Boolean
 }

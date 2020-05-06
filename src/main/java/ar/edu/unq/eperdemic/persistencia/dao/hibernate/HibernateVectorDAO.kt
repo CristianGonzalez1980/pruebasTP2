@@ -15,6 +15,16 @@ open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), Vector
         return this.recuperar(idDelVector.toLong())
     }
 
+    override fun recuperarEnfermedades(idDelVector: Int): Vector {
+        val session = TransactionRunner.currentSession
+
+        val hql = ("select enfermedades from vector where id = :idDelVector")
+
+        var query =  session.createQuery(hql, Vector::class.java)
+
+        query.setParameter("idDelVector" , idDelVector)
+    }
+
     override fun crear(vector: Vector): Vector {
         this.guardar(vector)
         return (this.recuperar(vector.id))

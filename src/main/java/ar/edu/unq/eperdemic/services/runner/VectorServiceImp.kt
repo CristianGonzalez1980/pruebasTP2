@@ -16,25 +16,26 @@ class VectorServiceImp (
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
-            var vectoresActualizar :  MutableList<Vector> = ArrayList()
-            for (v: Vector in vectores){
-                if(vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado , v)){
-                    vectoresActualizar.add(v)
+            for (vectorAInfectar: Vector in vectores){
+                if(vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado , vectorAInfectar)){
+                    for especie in vectorInfectado.enfermedades{
+                        this.infectar(vectorAInfectar, especie)
+                    }
                 }
-            }
-            for(v : Vector in vectoresActualizar){
-                vectorDAO.actualizar(v)
             }
         }
 
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
-        TODO("Not yet implemented")
+        vector.enfermedades.add(especie)
+        vectorDAO.actualizar(vector)
     }
 
     override fun enfermedades(vectorId: Int): List<Especie> {
-        TODO("Not yet implemented")
+        return runTrx {
+            vectorDAO.recuperarEnfermedades(vectorId)
+        }
     }
 
     override fun crearVector(ubicacion: Ubicacion, estrategia: StrategyPersona): Vector {

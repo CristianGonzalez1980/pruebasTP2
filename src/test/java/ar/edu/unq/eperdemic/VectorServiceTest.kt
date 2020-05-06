@@ -2,8 +2,9 @@ package ar.edu.unq.eperdemic
 
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
-import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInterface
-import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyPersona
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyAnimal
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInsecto
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
@@ -39,25 +40,22 @@ class VectorServiceTest {
     fun crearModelo() {
         this.service = VectorServiceImp(HibernateVectorDAO(),
                 HibernateDataDAO())
-        estrategia = StrategyPersona()
+        estrategia = StrategyHumano()
         ubicacion1 = Ubicacion("Argentina")
         patogeno = Patogeno("Virus" , 80 , 80 , 80)
         especie1 = Especie(patogeno , "Dengue", "Argentina" , 15)
-        //especie2 = Especie()
-        //especie3 = Especie()
         vectores = ArrayList()
         vectores.add(vectorD)
         vectorA.enfermedades.add(especie1)
-        service.crearVector(ubicacion1, estrategia)
-        service.crearVector(ubicacion1, estrategia)
+        vectorA = service.crearVector(ubicacion1, estrategia) //"crearVector" devuelve con un return el vector creado, por eso lo puse asi
+        vectorB = service.crearVector(ubicacion1, estrategia)
     }
 
 
 
     @Test
     fun contagiarAOtroVector() {
-        var vectorRecuperado = service.recuperarVector(vectorD.id!!.toInt())
-        Assert.assertTrue(vectorRecuperado.enfermedades.isEmpty())
+        Assert.assertTrue(vectorA.enfermedades.isEmpty())
         service.contagiar(vectorA , vectores)
         var vectorRecuperadoPost = service.recuperarVector(vectorD.id!!.toInt())
 
