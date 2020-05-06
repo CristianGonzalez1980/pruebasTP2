@@ -26,4 +26,6 @@ open class HibernateUbicacionDAO : HibernateDAO<Ubicacion>(Ubicacion::class.java
     }
 
 
+
+
 }

@@ -56,6 +56,9 @@ class UbicacionDaoTest {
 
     @Test
     fun moverDeUbicacionVectores() {
+
+        //ve
+
         var laPlata: Ubicacion = runTrx {
             dao.crear(ubicacion3)
             ubicacion3.alojarVector(vectorC)
@@ -85,5 +88,6 @@ class UbicacionDaoTest {
             dao.recuperar(cityBell.nombreDeLaUbicacion!!)
         }
         Assert.assertEquals(3, cityBellR.vectores.size)
+
     }
 }
