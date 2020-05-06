@@ -11,7 +11,7 @@ interface VectorDAO {
     fun crearVector(ubicacion: Ubicacion, estrategia: StrategySuperClase): Vector
     fun recuperar(idDelVector: Int): Vector
     fun eliminar(idDelVector: Int)
-    fun infectar(vectir: Vector)
+    fun infectar(vector: Vector)
     fun actualizar(vector : Vector)
 
 }

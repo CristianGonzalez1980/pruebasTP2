@@ -4,16 +4,16 @@ import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Vector
 
 
-class StrategyHumano : StrategySuperClase() {
-    override fun poneEnRiesgoA (vectorRecibido: Vector): Boolean {
-        return (vectorRecibido.estrategiaDeContagio.tipo() == "Humano" ) || (vectorRecibido.estrategiaDeContagio.tipo() == "Insecto"))
+class StrategyInsecto : StrategySuperClase() {
+    override fun poneEnRiesgoA(vectorRecibido: Vector): Boolean {
+        return ((vectorRecibido.estrategiaDeContagio!!.tipo() == "Animal") || (vectorRecibido.estrategiaDeContagio!!.tipo() == "Humano"))
     }
 
     override fun tipo(): String {
-        return "Humano"
+        return "Insecto"
     }
 
-    override fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector) : Boolean {
+    override fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector): Boolean {
         var resultado = false
         if (this.poneEnRiesgoA(vectorAContagiar)) {
             var enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
