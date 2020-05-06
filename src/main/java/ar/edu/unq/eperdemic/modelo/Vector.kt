@@ -1,6 +1,6 @@
 package ar.edu.unq.eperdemic.modelo
 
-import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInterface
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategySuperClase
 import javax.persistence.*
 import javax.transaction.Transactional
 import kotlin.jvm.Transient
@@ -21,7 +21,7 @@ class Vector() {
     var enfermedades : MutableSet<Especie> = HashSet()
 
     @Transient
-    var estrategiaDeContagio : StrategyInterface? = null
+    var estrategiaDeContagio : StrategySuperClase? = null
 
 
 
@@ -29,7 +29,7 @@ class Vector() {
         vector.enfermedades.add(especie)
     }
 
-    constructor(location: Ubicacion  , estrategia : StrategyInterface ) : this() {
+    constructor(location: Ubicacion  , estrategia : StrategySuperClase ) : this() {
         this.location = location
         this.estrategiaDeContagio = estrategia
     }
