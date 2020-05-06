@@ -1,8 +1,21 @@
 package ar.edu.unq.eperdemic.modelo
 
-class Vector( var id: Int?,
-              var nombreDeLocacionActual: String) {
-    fun getId() : Int{
+import javax.persistence.*
+
+@Entity(name = "vector")
+@Table(name = "vector")
+class Vector() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+    @ManyToOne
+    var location: Ubicacion? = null
+
+    fun getId() : Long{
         return this.id!!
+    }
+
+    constructor(location: Ubicacion) : this() {
+        this.location = location
     }
 }
