@@ -18,6 +18,8 @@ import org.junit.Test
 
 class VectorServiceTest {
 
+
+    lateinit var ubicacion1: Ubicacion
     lateinit var service: VectorServiceImp
     lateinit var vectorA: Vector
     lateinit var vectorB: Vector
@@ -37,30 +39,17 @@ class VectorServiceTest {
     fun crearModelo() {
         this.service = VectorServiceImp(HibernateVectorDAO(),
                 HibernateDataDAO())
-
-
+        estrategia = StrategyPersona()
+        ubicacion1 = Ubicacion("Argentina")
         patogeno = Patogeno("Virus" , 80 , 80 , 80)
-        vectorA = Vector()
-        //vectorB = Vector()
-        //vectorC = Vector()
-        vectorD = Vector()
         especie1 = Especie(patogeno , "Dengue", "Argentina" , 15)
         //especie2 = Especie()
         //especie3 = Especie()
-        estrategia = StrategyPersona()
         vectores = ArrayList()
         vectores.add(vectorD)
-        vectorA.estrategiaDeContagio = estrategia
         vectorA.enfermedades.add(especie1)
-        service.crearVector(vectorA)
-        service.crearVector(vectorD)
-
-
-
-
-
-
-
+        service.crearVector(ubicacion1, estrategia)
+        service.crearVector(ubicacion1, estrategia)
     }
 
 
@@ -68,11 +57,8 @@ class VectorServiceTest {
     @Test
     fun contagiarAOtroVector() {
         var vectorRecuperado = service.recuperarVector(vectorD.id!!.toInt())
-
         Assert.assertTrue(vectorRecuperado.enfermedades.isEmpty())
-       // vectorA.contagiar(vectorA , vectores)
         service.contagiar(vectorA , vectores)
-
         var vectorRecuperadoPost = service.recuperarVector(vectorD.id!!.toInt())
 
         Assert.assertEquals(1 ,vectorRecuperadoPost.enfermedades.size )

@@ -51,7 +51,7 @@ class Patogeno(){
     }
 
     fun agregarEspecie(nombreEspecie: String, paisDeOrigen: String, adn: Int) : Especie{
-        var nuevaEspecie: Especie = Especie(this, nombreEspecie, paisDeOrigen, adn)
+        val nuevaEspecie: Especie = Especie(this, nombreEspecie, paisDeOrigen, adn)
         this.especies.add(nuevaEspecie)
         return nuevaEspecie
 

@@ -2,6 +2,7 @@ package ar.edu.unq.eperdemic.modelo
 
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInterface
 import javax.persistence.*
+import javax.transaction.Transactional
 import kotlin.jvm.Transient
 
 @Entity(name = "vector")
@@ -30,20 +31,13 @@ class Vector() {
 
     constructor(location: Ubicacion  , estrategia : StrategyInterface ) : this() {
         this.location = location
-
         this.estrategiaDeContagio = estrategia
     }
 
     fun contagiar(vectorInfectado : Vector, vectores: List<Vector>){
         for (v: Vector in vectores){
             estrategiaDeContagio?.darContagio(vectorInfectado , v)
-        
-    constructor(location: Ubicacion) : this() {
-        this.location = location
-    }
-
-    fun getId(): Long {
-        return this.id!!
+        }
     }
 
     fun cambiarDeUbicacion(ubicacion: Ubicacion) {
