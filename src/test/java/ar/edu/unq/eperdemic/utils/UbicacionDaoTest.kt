@@ -51,6 +51,6 @@ class UbicacionDaoTest {
 
     @Test
     fun moverDeUbicacionVectores() {
-        ve
+        //ve
     }
 }

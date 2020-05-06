@@ -13,7 +13,18 @@ class VectorServiceImp (
     ) : VectorService {
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
-        TODO("Not yet implemented")
+        runTrx {
+            var vectoresActualizar :  MutableList<Vector> = ArrayList()
+            for (v: Vector in vectores){
+                if(vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado , v)){
+                    vectoresActualizar.add(v)
+                }
+            }
+            for(v : Vector in vectoresActualizar){
+                vectorDAO.actualizar(v)
+            }
+        }
+
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
@@ -36,5 +47,7 @@ class VectorServiceImp (
         runTrx { vectorDAO.eliminar(vectorId) }
     }
 
-
+    public fun clear() {
+        runTrx { dataDAO.clear() }
+    }
 }
