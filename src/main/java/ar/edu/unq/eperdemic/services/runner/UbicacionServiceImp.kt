@@ -10,41 +10,47 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 
 class UbicacionServiceImp(
         private val ubicacionDAO: UbicacionDAO,
-        private val dataDAO: DataDAO ,
-       private val vectorDAO: VectorDAO
+        private val dataDAO: DataDAO,
+        private val vectorDAO: VectorDAO,
+        private val vectorServiceImp: VectorServiceImp
 
 ) : UbicacionService {
 
     override fun mover(vectorId: Int, nombreUbicacion: String) {
-            runTrx {
-                var vector = vectorDAO.recuperar(vectorId)
-                var ubicacionNueva = ubicacionDAO.recuperar(nombreUbicacion)
-                var ubicacionVieja = ubicacionNueva.alojarVector(vector)
+        runTrx {
+            var vector = vectorDAO.recuperar(vectorId)
+            var ubicacionNueva = ubicacionDAO.recuperar(nombreUbicacion)
+            var ubicacionVieja = ubicacionNueva.alojarVector(vector)
+            if (vector.estaInfectado()) {
+                vectorServiceImp.contagiar(vector, ubicacionNueva.vectores.toList())
                 this.actualizar(ubicacionVieja)
                 this.actualizar(ubicacionNueva)
                 vectorDAO.actualizar(vector)
             }
-    }
-
-    override fun actualizar(ubicacion:Ubicacion){
-        runTrx {
-            ubicacionDAO.actualizar(ubicacion)
         }
     }
 
-
+    override fun actualizar(ubicacion: Ubicacion) {
+        runTrx { ubicacionDAO.actualizar(ubicacion) }
+    }
 
     override fun expandir(nombreUbicacion: String) {
-        TODO("Not yet implemented")
+        val ubicacion: Ubicacion = this.recuperar(nombreUbicacion)
+        var vectores: MutableList<Vector> = ubicacion.vectores.toMutableList()
+        var vectorInfectado: Vector? = vectores.find { it.estaInfectado() }
+        if (vectorInfectado != null) {
+            vectorServiceImp.contagiar(vectorInfectado, vectores)
+        }
     }
 
     override fun crearUbicacion(nombre: String): Ubicacion {
         return runTrx {
             val ubicacion = Ubicacion(nombre)
-            ubicacionDAO.crear(ubicacion) }
+            ubicacionDAO.crear(ubicacion)
+        }
     }
 
-   override public fun clear() {
+    override public fun clear() {
         runTrx { dataDAO.clear() }
     }
 

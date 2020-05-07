@@ -35,6 +35,7 @@ class VectorServiceImp (
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
+        this.recuperarVector(vector.id!!.toInt())
         vector.enfermedades.add(especie)
         this.actualizar(vector)
     }

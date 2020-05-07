@@ -5,6 +5,7 @@ import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.UbicacionDAO
+import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateUbicacionDAO
@@ -21,7 +22,7 @@ import org.junit.Test
 class UbicacionServiceTest {
 
     lateinit var service: UbicacionService
-    lateinit var serviceVec : VectorService
+    lateinit var serviceVec: VectorService
     lateinit var ubi1: Ubicacion
     lateinit var ubi2: Ubicacion
     lateinit var ubi3: Ubicacion
@@ -30,21 +31,21 @@ class UbicacionServiceTest {
     lateinit var vectorC: Vector
     lateinit var vectores: MutableList<Vector>
     lateinit var dao: HibernateUbicacionDAO
-    lateinit var estrategia  :StrategyHumano
+    lateinit var estrategia: StrategyHumano
 
     @Before
     fun crearModelo() {
         this.service = UbicacionServiceImp(HibernateUbicacionDAO(),
-                HibernateDataDAO() , HibernateVectorDAO())
-        this.serviceVec = VectorServiceImp(HibernateVectorDAO() , HibernateDataDAO())
+                HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
+        this.serviceVec = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
 
         //ubi1 = service.crearUbicacion("Bernal" )
         estrategia = StrategyHumano()
-       ubi3 = service.crearUbicacion("La Plata")
+        ubi3 = service.crearUbicacion("La Plata")
         ubi2 = service.crearUbicacion("Quilmes")
-        vectorA = Vector(ubi3 ,estrategia)
-        vectorB = Vector(ubi2 , estrategia)
-        vectorC = Vector(ubi2 , estrategia)
+        vectorA = Vector(ubi3, estrategia)
+        vectorB = Vector(ubi2, estrategia)
+        vectorC = Vector(ubi2, estrategia)
         vectorA = serviceVec.crearVector(vectorA)
         service.actualizar(ubi3)
         vectorB = serviceVec.crearVector(vectorB)
@@ -53,20 +54,19 @@ class UbicacionServiceTest {
     }
 
     @Test
-    fun recuperarId(){
+    fun recuperarId() {
 
-        Assert.assertEquals(1 , service.recuperar("La Plata").vectores.size)
+        Assert.assertEquals(1, service.recuperar("La Plata").vectores.size)
     }
 
     @Test
     fun cambioDeUbicacion() {
-        Assert.assertEquals("La Plata" , vectorA.location!!.nombreDeLaUbicacion)
-        service.mover(vectorA.id!!.toInt() , "Quilmes")
+        Assert.assertEquals("La Plata", vectorA.location!!.nombreDeLaUbicacion)
+        service.mover(vectorA.id!!.toInt(), "Quilmes")
 
-        var vectorARecuperado  = serviceVec.recuperarVector(vectorA.id!!.toInt())
-        Assert.assertEquals("Quilmes" , vectorARecuperado.location!!.nombreDeLaUbicacion)
+        var vectorARecuperado = serviceVec.recuperarVector(vectorA.id!!.toInt())
+        Assert.assertEquals("Quilmes", vectorARecuperado.location!!.nombreDeLaUbicacion)
     }
-
 
 
     @After

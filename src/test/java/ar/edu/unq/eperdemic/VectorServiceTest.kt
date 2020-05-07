@@ -47,7 +47,7 @@ class VectorServiceTest {
     fun crearModelo() {
         this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
         this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
-        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO())
+        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(),VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
         estrategia = StrategyHumano()
         estrategia1 = StrategyAnimal()
         patogeno = Patogeno("Virus", 80, 80, 80)

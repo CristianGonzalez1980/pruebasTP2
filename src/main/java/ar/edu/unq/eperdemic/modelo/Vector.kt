@@ -14,31 +14,30 @@ class Vector() {
 
     @ManyToOne
     var location: Ubicacion? = null
-  
+
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    var enfermedades : MutableSet<Especie> = HashSet()
+    var enfermedades: MutableSet<Especie> = HashSet()
 
     @Transient
-    var estrategiaDeContagio : StrategySuperClase? = null
-
+    var estrategiaDeContagio: StrategySuperClase? = null
 
 
     fun infectar(vector: Vector, especie: Especie) {
         vector.enfermedades.add(especie)
     }
 
-    constructor(location: Ubicacion  , estrategia : StrategySuperClase) : this() {
+    constructor(location: Ubicacion, estrategia: StrategySuperClase) : this() {
         this.location = location
         location.vectores.add(this)
         this.estrategiaDeContagio = estrategia
     }
 
-    fun contagiar(vectorInfectado : Vector, vectores: List<Vector>): MutableList<Vector> {
+    fun contagiar(vectorInfectado: Vector, vectores: List<Vector>): MutableList<Vector> {
         val listaResultante: MutableList<Vector> = mutableListOf()
         for (v: Vector in vectores) {
-                if (estrategiaDeContagio?.darContagio(vectorInfectado, v)!!){
-                    listaResultante.add(v)
-                }
+            if (estrategiaDeContagio?.darContagio(vectorInfectado, v)!!) {
+                listaResultante.add(v)
+            }
         }
         return listaResultante
     }
@@ -48,4 +47,7 @@ class Vector() {
         ubicacion.alojarVector(this)
     }
 
+    fun estaInfectado(): Boolean {
+        return (this.enfermedades.isNotEmpty())
+    }
 }
