@@ -23,7 +23,7 @@ class Vector() {
 
 
 
-    fun infectar(vector: Vector, especie: Especie){
+    fun infectar(vector: Vector, especie: Especie) {
         vector.enfermedades.add(especie)
     }
 
@@ -32,10 +32,14 @@ class Vector() {
         this.estrategiaDeContagio = estrategia
     }
 
-    fun contagiar(vectorInfectado : Vector, vectores: List<Vector>){
-        for (v: Vector in vectores){
-            estrategiaDeContagio?.darContagio(vectorInfectado , v)
+    fun contagiar(vectorInfectado : Vector, vectores: List<Vector>): MutableList<Vector> {
+        val listaResultante: MutableList<Vector> = mutableListOf()
+        for (v: Vector in vectores) {
+                if (estrategiaDeContagio?.darContagio(vectorInfectado, v)!!){
+                    listaResultante.add(v)
+                }
         }
+        return listaResultante
     }
 
     fun cambiarDeUbicacion(ubicacion: Ubicacion) {

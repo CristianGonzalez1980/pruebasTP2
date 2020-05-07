@@ -52,8 +52,4 @@ class Especie(): Serializable {
         val especie = o as Especie?
         return owner!!.id == (especie!!.owner!!).id
     }
-
-    override fun hashCode(): Int {
-        return Objects.hash(owner!!.id)
-    }
 }

@@ -70,7 +70,7 @@ class PatogenoServiceTest {
         patogeno = Patogeno("1-12", 20, 50, 12)
         val id = service.crearPatogeno(patogeno)
         service.agregarEspecie(id,"cruza","Ecuador",44)
-        val patogenoRecuperado = service.recuperarPatogeno(id)
+        //val patogenoRecuperado = service.recuperarPatogeno(id)
         //revisar la implementacion de recuperarEspecie segun lo que pide el enunciado
         //Assert.assertEquals(patogenoRecuperado.id, (service.recuperarEspecie(id).owner)!!.id)
 

@@ -20,17 +20,18 @@ class Patogeno(){
     val cantidadDeEspecies: Int
         get() = especies.size
 
-    var capacidadContagioAnimal: Int? = null
-    var capacidadContagioInsecto: Int? = null
-    var capacidadContagioPersona: Int? = null
+    @Column(nullable = false, length = 500)
+    var capacidadContagio: Int? = null
 
+    @Column(nullable = false, length = 500)
     var defensa: Int? = null
 
+    @Column(nullable = false, length = 500)
     var letalidad: Int? = null
 
     constructor(unTipo: String, unaCapacidad: Int, unaDefensa: Int, unaLetalidad: Int) : this() {
         this.tipo = unTipo
-        this.capacidadContagioPersona = unaCapacidad
+        this.capacidadContagio = unaCapacidad
         this.defensa = unaDefensa
         this.letalidad = unaLetalidad
     }

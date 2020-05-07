@@ -12,14 +12,6 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), VectorDAO {
 
     override fun recuperar(idDelVector: Int): Vector {
-        //return this.recuperar(idDelVector.toLong())
-        val session = TransactionRunner.currentSession
-
-        val hql = ("from vector where id = :idDelVector")
-
-        val query =  session.createQuery(hql, Vector::class.java)
-
-        query.setParameter("idDelVector" , idDelVector)
         return this.recuperar(idDelVector.toLong())
     }
 
@@ -41,10 +33,13 @@ open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), Vector
         val query =  session.createQuery(hql, Vector::class.java)
 
         query.setParameter("idDelVector" , idDelVector)
+
+        query.executeUpdate()
     }
 
-    override fun actualizar(vector: Vector) {
+    override fun actualizar(vector: Vector): Vector {
         val session = TransactionRunner.currentSession
         session.saveOrUpdate(vector)
+        return this.recuperar(vector.id)
     }
 }

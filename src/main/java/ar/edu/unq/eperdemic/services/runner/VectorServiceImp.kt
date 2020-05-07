@@ -15,6 +15,12 @@ class VectorServiceImp (
     private val dataDAO: DataDAO
     ) : VectorService {
 
+    override fun actualizar (vector: Vector): Vector {
+        return runTrx {
+            vectorDAO.actualizar(vector)
+        }
+    }
+
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
             for (vectorAInfectar: Vector in vectores){
@@ -25,7 +31,6 @@ class VectorServiceImp (
                 }
             }
         }
-
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
@@ -52,7 +57,7 @@ class VectorServiceImp (
         runTrx { vectorDAO.eliminar(vectorId) }
     }
 
-    public fun clear() {
+    fun clear() {
         runTrx { dataDAO.clear() }
     }
 }

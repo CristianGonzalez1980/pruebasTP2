@@ -29,12 +29,17 @@ class VectorServiceTest {
     lateinit var vectorB: Vector
     lateinit var vectorC: Vector
     lateinit var vectorD: Vector
+    lateinit var vectorARecuperado : Vector
+    lateinit var vectorBRecuperado : Vector
+    lateinit var vectorCRecuperado : Vector
+    lateinit var vectorDRecuperado : Vector
     lateinit var vectores: MutableList<Vector>
-    lateinit var especie1 : Especie
-    lateinit var especie2 : Especie
-    lateinit var especie3 : Especie
-    lateinit var estrategia : StrategyHumano
-    lateinit var patogeno : Patogeno
+    lateinit var especie1: Especie
+    lateinit var especie2: Especie
+    lateinit var especie3: Especie
+    lateinit var estrategia: StrategyHumano
+    lateinit var estrategia1: StrategyAnimal
+    lateinit var patogeno: Patogeno
 
 
 
@@ -44,6 +49,7 @@ class VectorServiceTest {
         this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
         this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO())
         estrategia = StrategyHumano()
+        estrategia1 = StrategyAnimal()
         patogeno = Patogeno("Virus", 80, 80, 80)
         val id = servicePatog.crearPatogeno(patogeno)
         patogeno = servicePatog.recuperarPatogeno(id)
@@ -51,23 +57,39 @@ class VectorServiceTest {
         val ubicacion1 = serviceUbic.crearUbicacion("Argentina")
         vectorA = Vector(ubicacion1, estrategia)
         vectorB = Vector(ubicacion1, estrategia)
+        vectorC = Vector(ubicacion1, estrategia1)
+        vectorD = Vector(ubicacion1, estrategia1)
         vectorA.enfermedades.add(especie1)
-        vectorA = serviceVect.crearVector(vectorA)
-        print("El id del vectorA es: " + vectorA.id.toString())
-        vectorC = serviceVect.crearVector(vectorB)
-        print("El id del vectorB es: " + vectorB.id.toString())
+        vectorC.enfermedades.add(especie1)
+        serviceVect.crearVector(vectorA)
+        serviceVect.crearVector(vectorB)
+        serviceVect.crearVector(vectorC)
+        serviceVect.crearVector(vectorD)
+        vectorARecuperado = serviceVect.recuperarVector(vectorA.id!!.toInt())
+        vectorBRecuperado = serviceVect.recuperarVector(vectorB.id!!.toInt())
+        vectorCRecuperado = serviceVect.recuperarVector(vectorC.id!!.toInt())
+        vectorDRecuperado = serviceVect.recuperarVector(vectorD.id!!.toInt())
         vectores = ArrayList()
-        vectores.add(vectorB)
+        vectores.add(vectorBRecuperado)
+        vectores.add(vectorDRecuperado)
     }
 
 
 
     @Test
-    fun contagiarAOtroVector() {
-        Assert.assertTrue(vectorB.enfermedades.isEmpty())
-        serviceVect.contagiar(vectorA, vectores)
-        val vectorRecuperadoPost = serviceVect.recuperarVector(vectorB.id!!.toInt())
-        Assert.assertEquals(1,vectorRecuperadoPost.enfermedades.size)
+    fun contagiarExitoso() {
+        Assert.assertTrue(vectorBRecuperado.enfermedades.isEmpty())
+        vectorA.contagiar(vectorA, vectores)
+        val vectorBRecuperadoPost = serviceVect.actualizar(vectorBRecuperado)
+        Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size)
+    }
+
+    @Test
+    fun contagioNoExitoso() {
+        Assert.assertTrue(vectorBRecuperado.enfermedades.isEmpty())
+        vectorA.contagiar(vectorCRecuperado, vectores)
+        val vectorDRecuperadoPost = serviceVect.actualizar(vectorDRecuperado)
+        Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
     }
 
     @After

@@ -18,7 +18,7 @@ class StrategyHumano : StrategySuperClase() {
         if (this.poneEnRiesgoA(vectorAContagiar)) {
             var enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
             for (e: Especie in enfermedades) {
-                var factorContagio = e.owner?.capacidadContagioPersona
+                var factorContagio = e.owner?.capacidadContagio
                 var porcentajeDeContagioExitoso = 5 + factorContagio!!
                 if (porcentajeDeContagioExitoso > 70) {
                     vectorInfectado.infectar(vectorAContagiar, e)

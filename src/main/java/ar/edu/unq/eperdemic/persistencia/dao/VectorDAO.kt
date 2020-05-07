@@ -14,6 +14,5 @@ interface VectorDAO {
     fun recuperarEnfermedades(idDelVector: Int): MutableSet<Especie>
     fun eliminar(idDelVector: Int)
     //fun infectar(vector: Vector)
-    fun actualizar(vector : Vector)
-
+    fun actualizar(vector : Vector): Vector
 }
