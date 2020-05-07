@@ -28,6 +28,7 @@ class VectorServiceImp (
                     for (e:Especie in vectorInfectado.enfermedades){
                         this.infectar(vectorAInfectar, e)
                     }
+                    this.actualizar(vectorAInfectar)
                 }
             }
         }

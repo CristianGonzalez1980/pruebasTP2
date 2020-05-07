@@ -47,7 +47,7 @@ class VectorServiceTest {
     fun crearModelo() {
         this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
         this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
-        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO() , HibernateVectorDAO())
+        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO())
         estrategia = StrategyHumano()
         estrategia1 = StrategyAnimal()
         patogeno = Patogeno("Virus", 80, 80, 80)
@@ -83,7 +83,7 @@ class VectorServiceTest {
     @Test
     fun contagioNoExitoso() {
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
-        vectorA.contagiar(vectorC, vectores)
+        serviceVect.contagiar(vectorC, vectores)
         val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
         Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
     }
