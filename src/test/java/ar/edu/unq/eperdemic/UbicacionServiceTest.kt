@@ -31,8 +31,8 @@ class UbicacionServiceTest {
         this.service = UbicacionServiceImp(HibernateUbicacionDAO(),
                 HibernateDataDAO())
 
-        ubi1 = Ubicacion("Bernal")
-        ubi3 = Ubicacion("La Plata")
+        ubi1 = service.crearUbicacion("Bernal")
+        ubi3 = service.crearUbicacion("a Plata")
         vectorA = Vector()
         vectorB = Vector()
         vectorC = Vector()

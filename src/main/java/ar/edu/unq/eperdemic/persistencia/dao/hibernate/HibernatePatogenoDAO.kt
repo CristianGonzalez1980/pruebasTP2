@@ -40,13 +40,8 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
     }
 
     override fun actualizar(unPatogeno: Patogeno) {
-
         val session = TransactionRunner.currentSession
-
-        val hql = ("select id cantidadDeEspecies from patogeno " + "where id = :unId ")
-
-        val query = session.createQuery(hql, Patogeno::class.java)
-        query.setParameter("unId", unPatogeno.id)
+        session.saveOrUpdate(unPatogeno)
     }
 
     override fun crear(patogeno: Patogeno): Int {

@@ -23,7 +23,7 @@ class Especie(): Serializable {
     fun tieneMutaciones(mutaciones: List<Mutacion>) : Boolean {         //Corrobora que la especie tenga las mutaciones
         var resultado = true                                            // que requiere la nueva mutacion a adquirir
         for (mutacion: Mutacion in mutaciones){
-            resultado = (resultado and this.mutaciones!!.contains(mutacion))
+            resultado = (resultado and this.mutaciones.contains(mutacion))
         }
         return resultado
     }

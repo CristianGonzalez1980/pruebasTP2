@@ -12,20 +12,23 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), VectorDAO {
 
     override fun recuperar(idDelVector: Int): Vector {
+        //return this.recuperar(idDelVector.toLong())
+        val session = TransactionRunner.currentSession
+
+        val hql = ("from vector where id = :idDelVector")
+
+        val query =  session.createQuery(hql, Vector::class.java)
+
+        query.setParameter("idDelVector" , idDelVector)
         return this.recuperar(idDelVector.toLong())
     }
 
-    override fun recuperarEnfermedades(idDelVector: Int): Vector {
-        val session = TransactionRunner.currentSession
-
-        val hql = ("select enfermedades from vector where id = :idDelVector")
-
-        var query =  session.createQuery(hql, Vector::class.java)
-
-        query.setParameter("idDelVector" , idDelVector)
+    override fun recuperarEnfermedades(idDelVector: Int): MutableSet<Especie> {
+        val vectorRecuperado = this.recuperar(idDelVector)
+        return vectorRecuperado.enfermedades
     }
 
-    override fun crear(vector: Vector): Vector {
+    override fun crearVector(vector: Vector): Vector {
         this.guardar(vector)
         return (this.recuperar(vector.id))
     }
@@ -35,26 +38,13 @@ open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), Vector
 
         val hql = ("delete from vector where id = :idDelVector")
 
-        var query =  session.createQuery(hql, Vector::class.java)
+        val query =  session.createQuery(hql, Vector::class.java)
 
         query.setParameter("idDelVector" , idDelVector)
     }
 
     override fun actualizar(vector: Vector) {
         val session = TransactionRunner.currentSession
-
-        val hql = ("update from vector where id = :idDelVector")
-
-       var query =  session.createQuery(hql, Vector::class.java)
-
-        query.setParameter("idDelVector" , vector.id)
-
-
+        session.saveOrUpdate(vector)
     }
-
-
-
-
-
-
 }

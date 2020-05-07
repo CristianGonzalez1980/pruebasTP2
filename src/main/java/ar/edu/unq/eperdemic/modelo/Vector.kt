@@ -14,8 +14,6 @@ class Vector() {
 
     @ManyToOne
     var location: Ubicacion? = null
-    var infectado: Boolean = false
-
   
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var enfermedades : MutableSet<Especie> = HashSet()
@@ -29,7 +27,7 @@ class Vector() {
         vector.enfermedades.add(especie)
     }
 
-    constructor(location: Ubicacion  , estrategia : StrategySuperClase ) : this() {
+    constructor(location: Ubicacion  , estrategia : StrategySuperClase) : this() {
         this.location = location
         this.estrategiaDeContagio = estrategia
     }

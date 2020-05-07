@@ -7,5 +7,5 @@ interface UbicacionService {
     fun mover(vectorId: Int, nombreUbicacion: String)
     fun expandir(nombreUbicacion: String)
     /* Operaciones CRUD*/
-    fun crearUbicacion(nombreUbicacion: String): Ubicacion
+    fun crearUbicacion(nombreDeLaUbicacion: String): Ubicacion
 }

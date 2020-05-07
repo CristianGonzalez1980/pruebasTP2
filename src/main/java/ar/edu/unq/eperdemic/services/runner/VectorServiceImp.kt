@@ -1,7 +1,7 @@
 package ar.edu.unq.eperdemic.services.runner
 
 import ar.edu.unq.eperdemic.modelo.Especie
-import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyPersona
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategySuperClase
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
@@ -14,9 +14,6 @@ class VectorServiceImp (
     private val vectorDAO: VectorDAO,
     private val dataDAO: DataDAO
     ) : VectorService {
-    override fun crearVector(vector: Vector): Vector {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
@@ -36,16 +33,15 @@ class VectorServiceImp (
         vectorDAO.actualizar(vector)
     }
 
-    override fun enfermedades(vectorId: Int): List<Especie> {
+    override fun enfermedades(vectorId: Int): MutableSet<Especie> {
         return runTrx {
             vectorDAO.recuperarEnfermedades(vectorId)
         }
     }
 
-    override fun crearVector(ubicacion: Ubicacion, estrategia: StrategySuperClase): Vector {
+    override fun crearVector(vector: Vector): Vector {
         return runTrx {
-            var vector = Vector(ubicacion, estrategia)
-            vectorDAO.crear(vector) }
+            vectorDAO.crearVector(vector) }
     }
 
     override fun recuperarVector(vectorId: Int): Vector {

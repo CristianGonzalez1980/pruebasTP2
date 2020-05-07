@@ -30,7 +30,7 @@ class Patogeno(){
 
     constructor(unTipo: String, unaCapacidad: Int, unaDefensa: Int, unaLetalidad: Int) : this() {
         this.tipo = unTipo
-       this.capacidadContagioPersona = unaCapacidad
+        this.capacidadContagioPersona = unaCapacidad
         this.defensa = unaDefensa
         this.letalidad = unaLetalidad
     }
@@ -54,12 +54,9 @@ class Patogeno(){
         val nuevaEspecie: Especie = Especie(this, nombreEspecie, paisDeOrigen, adn)
         this.especies.add(nuevaEspecie)
         return nuevaEspecie
-
     }
 
     fun agregarEspecie(especie: Especie) {
-
         this.especies.add(especie)
-
     }
 }
