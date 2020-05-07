@@ -24,12 +24,12 @@ class UbicacionDaoTest {
     lateinit var vectorE: Vector
 
 
-    @Before
+   /* @Before
     fun crearModelo() {
         val ubicacionA = Ubicacion("La Plata", mutableSetOf())
         val ubicacionB = Ubicacion("La Plata", mutableSetOf())
-        val ubicacionC = Ubicacion("La Plata", mutableSetOf())
-        val ubicacionD = Ubicacion("La Plata", mutableSetOf())
+        val ubicacionC = Ubicacion("La Plata")
+        val ubicacionD = Ubicacion("La Plata")
         ubicacion1 = dao.crear(ubicacionA)
         ubicacion2 = dao.crear(ubicacionB)
         ubicacion3 = dao.crear(ubicacionC)
@@ -57,7 +57,7 @@ class UbicacionDaoTest {
         Assert.assertEquals(2, ubiPersistida.vectores.size)
 
     }
-
+*/
     /*@Test
     fun moverDeUbicacionVectores() {
 

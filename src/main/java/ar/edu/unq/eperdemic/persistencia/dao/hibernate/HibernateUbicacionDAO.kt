@@ -9,14 +9,14 @@ open class HibernateUbicacionDAO : HibernateDAO<Ubicacion>(Ubicacion::class.java
 
     override fun crear(ubicacion: Ubicacion) : Ubicacion{
         this.guardar(ubicacion)
-        return this.recuperar(ubicacion.id)
+        return this.recuperar(ubicacion.nombreDeLaUbicacion!!)
     }
 
     override fun recuperar(nombreDeLaUbicacion: String): Ubicacion {
         val session = TransactionRunner.currentSession
-        val hql = ("from ubicacion " + " where nombreDeLaUbicacion = :nombre")
+        val hql = ("from ubicacion " + " where nombreDeLaUbicacion = :id")
         val query = session.createQuery(hql, Ubicacion::class.java)
-        query.setParameter("nombre", nombreDeLaUbicacion)
+        query.setParameter("id", nombreDeLaUbicacion)
         return query.singleResult
     }
 
@@ -24,6 +24,7 @@ open class HibernateUbicacionDAO : HibernateDAO<Ubicacion>(Ubicacion::class.java
         val session = TransactionRunner.currentSession
         session.saveOrUpdate(ubicacion)
     }
+
 
 
 
