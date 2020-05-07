@@ -35,7 +35,7 @@ class VectorServiceImp (
 
     override fun infectar(vector: Vector, especie: Especie) {
         vector.enfermedades.add(especie)
-        vectorDAO.actualizar(vector)
+        this.actualizar(vector)
     }
 
     override fun enfermedades(vectorId: Int): MutableSet<Especie> {

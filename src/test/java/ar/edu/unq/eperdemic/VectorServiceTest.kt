@@ -61,34 +61,30 @@ class VectorServiceTest {
         vectorD = Vector(ubicacion1, estrategia1)
         vectorA.enfermedades.add(especie1)
         vectorC.enfermedades.add(especie1)
-        serviceVect.crearVector(vectorA)
-        serviceVect.crearVector(vectorB)
-        serviceVect.crearVector(vectorC)
-        serviceVect.crearVector(vectorD)
-        vectorARecuperado = serviceVect.recuperarVector(vectorA.id!!.toInt())
-        vectorBRecuperado = serviceVect.recuperarVector(vectorB.id!!.toInt())
-        vectorCRecuperado = serviceVect.recuperarVector(vectorC.id!!.toInt())
-        vectorDRecuperado = serviceVect.recuperarVector(vectorD.id!!.toInt())
+        vectorA = serviceVect.crearVector(vectorA)
+        vectorB = serviceVect.crearVector(vectorB)
+        vectorC = serviceVect.crearVector(vectorC)
+        vectorD = serviceVect.crearVector(vectorD)
         vectores = ArrayList()
-        vectores.add(vectorBRecuperado)
-        vectores.add(vectorDRecuperado)
+        vectores.add(vectorB)
+        vectores.add(vectorD)
     }
 
 
 
     @Test
     fun contagiarExitoso() {
-        Assert.assertTrue(vectorBRecuperado.enfermedades.isEmpty())
-        vectorA.contagiar(vectorA, vectores)
-        val vectorBRecuperadoPost = serviceVect.actualizar(vectorBRecuperado)
+        Assert.assertTrue(vectorB.enfermedades.isEmpty())
+        vectorA.contagiar(vectorC, vectores)
+        val vectorBRecuperadoPost = serviceVect.actualizar(vectorB)
         Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size)
     }
 
     @Test
     fun contagioNoExitoso() {
-        Assert.assertTrue(vectorBRecuperado.enfermedades.isEmpty())
-        vectorA.contagiar(vectorCRecuperado, vectores)
-        val vectorDRecuperadoPost = serviceVect.actualizar(vectorDRecuperado)
+        Assert.assertTrue(vectorB.enfermedades.isEmpty())
+        vectorA.contagiar(vectorC, vectores)
+        val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
         Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
     }
 
