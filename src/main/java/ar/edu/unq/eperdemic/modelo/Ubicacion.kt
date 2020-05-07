@@ -7,26 +7,26 @@ import javax.persistence.*
 @Table(name = "ubicacion")
 class Ubicacion() {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
     var nombreDeLaUbicacion: String? = null
     @OneToMany(mappedBy = "location", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var vectores: MutableSet<Vector> = HashSet()
 
-    constructor(nombreUbicacion: String, vectoresIniciales: MutableSet<Vector>) : this() {
+    constructor(nombreUbicacion: String) : this() {
         this.nombreDeLaUbicacion = nombreUbicacion
-        this.vectores = vectoresIniciales
     }
 
-    fun alojarVector(vector: Vector) {
+    fun alojarVector(vector: Vector) : Ubicacion {
         this.vectores.add(vector)
+        val ubicacionAnterior = vector.location
+        vector.location!!.desAlojarVector(vector)
         vector.location = this
+        return ubicacionAnterior!!
     }
 
     fun desAlojarVector(vector: Vector) {
         this.vectores.remove(vector)
-        vector.location = null
+
     }
 
     override fun toString(): String {

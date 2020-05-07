@@ -10,11 +10,29 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 
 class UbicacionServiceImp(
         private val ubicacionDAO: UbicacionDAO,
-        private val dataDAO: DataDAO
+        private val dataDAO: DataDAO ,
+       private val vectorDAO: VectorDAO
+
 ) : UbicacionService {
+
     override fun mover(vectorId: Int, nombreUbicacion: String) {
-        TODO("Not yet implemented")
+            runTrx {
+                var vector = vectorDAO.recuperar(vectorId)
+                var ubicacionNueva = ubicacionDAO.recuperar(nombreUbicacion)
+                var ubicacionVieja = ubicacionNueva.alojarVector(vector)
+                this.actualizar(ubicacionVieja)
+                this.actualizar(ubicacionNueva)
+                vectorDAO.actualizar(vector)
+            }
     }
+
+    override fun actualizar(ubicacion:Ubicacion){
+        runTrx {
+            ubicacionDAO.actualizar(ubicacion)
+        }
+    }
+
+
 
     override fun expandir(nombreUbicacion: String) {
         TODO("Not yet implemented")
@@ -22,11 +40,15 @@ class UbicacionServiceImp(
 
     override fun crearUbicacion(nombre: String): Ubicacion {
         return runTrx {
-            val vectores = mutableSetOf<Vector>()
-            val ubicacion = Ubicacion("nombre", vectores)
+            val ubicacion = Ubicacion(nombre)
             ubicacionDAO.crear(ubicacion) }
     }
-    public fun clear() {
+
+   override public fun clear() {
         runTrx { dataDAO.clear() }
+    }
+
+    override fun recuperar(ubicacion: String): Ubicacion {
+        return runTrx { ubicacionDAO.recuperar(ubicacion) }
     }
 }

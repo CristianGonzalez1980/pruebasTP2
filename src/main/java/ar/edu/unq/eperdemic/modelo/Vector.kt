@@ -29,6 +29,7 @@ class Vector() {
 
     constructor(location: Ubicacion  , estrategia : StrategySuperClase) : this() {
         this.location = location
+        location.vectores.add(this)
         this.estrategiaDeContagio = estrategia
     }
 
