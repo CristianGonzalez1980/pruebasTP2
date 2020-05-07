@@ -1,17 +1,19 @@
 package ar.edu.unq.eperdemic
 
+import ar.edu.unq.eperdemic.modelo.Especie
+import ar.edu.unq.eperdemic.modelo.Patogeno
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyAnimal
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.UbicacionDAO
 import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateUbicacionDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateVectorDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.*
+import ar.edu.unq.eperdemic.services.PatogenoService
 import ar.edu.unq.eperdemic.services.UbicacionService
 import ar.edu.unq.eperdemic.services.VectorService
+import ar.edu.unq.eperdemic.services.runner.PatogenoServiceImp
 import ar.edu.unq.eperdemic.services.runner.UbicacionServiceImp
 import ar.edu.unq.eperdemic.services.runner.VectorServiceImp
 import org.junit.After
@@ -23,29 +25,46 @@ class UbicacionServiceTest {
 
     lateinit var service: UbicacionService
     lateinit var serviceVec: VectorService
+    lateinit var servicePatog: PatogenoService
     lateinit var ubi1: Ubicacion
     lateinit var ubi2: Ubicacion
     lateinit var ubi3: Ubicacion
     lateinit var vectorA: Vector
     lateinit var vectorB: Vector
     lateinit var vectorC: Vector
+    lateinit var vectorD: Vector
+    lateinit var vectorE: Vector
     lateinit var vectores: MutableList<Vector>
     lateinit var dao: HibernateUbicacionDAO
     lateinit var estrategia: StrategyHumano
+    lateinit var estrategia1: StrategyAnimal
+    lateinit var patogeno: Patogeno
+    lateinit var especie1: Especie
 
     @Before
     fun crearModelo() {
         this.service = UbicacionServiceImp(HibernateUbicacionDAO(),
                 HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
         this.serviceVec = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
+        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
 
         //ubi1 = service.crearUbicacion("Bernal" )
         estrategia = StrategyHumano()
+        estrategia1 = StrategyAnimal()
+        patogeno = Patogeno("Virus", 80, 80, 80)
+        val id = servicePatog.crearPatogeno(patogeno)
+        patogeno = servicePatog.recuperarPatogeno(id)
+        especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
         ubi3 = service.crearUbicacion("La Plata")
         ubi2 = service.crearUbicacion("Quilmes")
         vectorA = Vector(ubi3, estrategia)
         vectorB = Vector(ubi2, estrategia)
-        vectorC = Vector(ubi2, estrategia)
+        vectorC = Vector(ubi2, estrategia1)
+        vectorD = Vector(ubi3, estrategia1)
+        vectorE = Vector(ubi3, estrategia1)
+        vectorD = serviceVec.crearVector(vectorD)
+        vectorE = serviceVec.crearVector(vectorE)
+        serviceVec.infectar(vectorD, especie1)
         vectorA = serviceVec.crearVector(vectorA)
         service.actualizar(ubi3)
         vectorB = serviceVec.crearVector(vectorB)
@@ -56,7 +75,7 @@ class UbicacionServiceTest {
     @Test
     fun recuperarId() {
 
-        Assert.assertEquals(1, service.recuperar("La Plata").vectores.size)
+        Assert.assertEquals(3, service.recuperar("La Plata").vectores.size)
     }
 
     @Test
@@ -68,6 +87,37 @@ class UbicacionServiceTest {
         Assert.assertEquals("Quilmes", vectorARecuperado.location!!.nombreDeLaUbicacion)
     }
 
+    @Test
+    fun cambiaUbicacionEInfectaVectores() {
+        service.mover(vectorD.id!!.toInt(), "Quilmes")
+        val vectores: MutableList<Vector> = service.recuperar("Quilmes").vectores.toMutableList()
+        val totalDeInfectados = vectores.count { it.estaInfectado() }
+        Assert.assertEquals(3, totalDeInfectados)
+    }
+
+    @Test
+    fun cambiaUbicacionVectorSanoNoInfectaVectores() {
+        service.mover(vectorE.id!!.toInt(), "Quilmes")
+        val vectores: MutableList<Vector> = service.recuperar("Quilmes").vectores.toMutableList()
+        val totalDeInfectados = vectores.count { it.estaInfectado() }
+        Assert.assertEquals(0, totalDeInfectados)
+    }
+
+    @Test
+    fun expandeLasEnfermedadesEnLaUbicacion() {
+        service.expandir("La Plata")
+        val vectores: MutableList<Vector> = service.recuperar("La Plata").vectores.toMutableList()
+        val totalDeInfectados = vectores.count { it.estaInfectado() }
+        Assert.assertEquals(3, totalDeInfectados)
+    }
+
+    @Test
+    fun intentaExpandirEnfermedadPeroNoLoLogra() {
+        service.expandir("Quilmes")
+        val vectores: MutableList<Vector> = service.recuperar("Quilmes").vectores.toMutableList()
+        val totalDeInfectados = vectores.count { it.estaInfectado() }
+        Assert.assertEquals(0, totalDeInfectados)
+    }
 
     @After
     fun cleanup() {

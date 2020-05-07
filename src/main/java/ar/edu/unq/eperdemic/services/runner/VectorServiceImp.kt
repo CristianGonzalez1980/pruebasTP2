@@ -10,12 +10,12 @@ import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
 import ar.edu.unq.eperdemic.services.VectorService
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 
-class VectorServiceImp (
-    private val vectorDAO: VectorDAO,
-    private val dataDAO: DataDAO
-    ) : VectorService {
+class VectorServiceImp(
+        private val vectorDAO: VectorDAO,
+        private val dataDAO: DataDAO
+) : VectorService {
 
-    override fun actualizar (vector: Vector): Vector {
+    override fun actualizar(vector: Vector): Vector {
         return runTrx {
             vectorDAO.actualizar(vector)
         }
@@ -23,9 +23,9 @@ class VectorServiceImp (
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
-            for (vectorAInfectar: Vector in vectores){
-                if(vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado , vectorAInfectar)){
-                    for (e:Especie in vectorInfectado.enfermedades){
+            for (vectorAInfectar: Vector in vectores) {
+                if (vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado, vectorAInfectar)) {
+                    for (e: Especie in vectorInfectado.enfermedades) {
                         this.infectar(vectorAInfectar, e)
                     }
                     this.actualizar(vectorAInfectar)
@@ -48,7 +48,8 @@ class VectorServiceImp (
 
     override fun crearVector(vector: Vector): Vector {
         return runTrx {
-            vectorDAO.crearVector(vector) }
+            vectorDAO.crearVector(vector)
+        }
     }
 
     override fun recuperarVector(vectorId: Int): Vector {
