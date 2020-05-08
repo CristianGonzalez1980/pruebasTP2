@@ -15,7 +15,7 @@ class Vector() {
     @ManyToOne
     var location: Ubicacion? = null
 
-    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany
     var enfermedades: MutableList<Especie> = mutableListOf()
 
     @Column(nullable = false, columnDefinition = "VARCHAR(64)")

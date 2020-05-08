@@ -65,10 +65,10 @@ class VectorServiceTest {
         serviceVect.crearVector(vectorB)
         serviceVect.crearVector(vectorC)
         serviceVect.crearVector(vectorD)
-        //vectorA = serviceVect.recuperarVector(vectorA.id!!.toInt()) -Se va a poder usar cuando logremos recuperar enfermedades
-        //vectorB = serviceVect.recuperarVector(vectorB.id!!.toInt()) "                 "               "
-        //vectorC = serviceVect.recuperarVector(vectorC.id!!.toInt()) "                 "               "
-        //vectorD = serviceVect.recuperarVector(vectorD.id!!.toInt()) "                 "               "
+        //vectorA = serviceVect.recuperarVector(vectorA.id!!.toInt()) //-Se va a poder usar cuando logremos recuperar enfermedades
+        //vectorB = serviceVect.recuperarVector(vectorB.id!!.toInt()) //"                 "               "
+        //vectorC = serviceVect.recuperarVector(vectorC.id!!.toInt()) //"                 "               "
+        //vectorD = serviceVect.recuperarVector(vectorD.id!!.toInt()) //"                 "               "
         vectores = ArrayList()
         vectores.add(vectorB)
         vectores.add(vectorD)
@@ -80,18 +80,18 @@ class VectorServiceTest {
     fun contagiarExitoso() {
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
         serviceVect.contagiar(vectorA, vectores)  //Ya los actualiza
-        //val vectorBRecuperadoPost = serviceVect.recuperarVector(vectorB.id!!.toInt()) -Se va a poder usar cuando logremos recuperar enfermedades
-        //Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size) -Se va a poder usar cuando logremos recuperar enfermedades
-        Assert.assertEquals(1,vectorB.enfermedades.size)
+        val vectorBRecuperadoPost = serviceVect.actualizar(vectorB)
+        //val vectorBRecuperadoPost = serviceVect.recuperarVector(vectorB.id!!.toInt()) //-Se va a poder usar cuando logremos recuperar enfermedades
+        Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size)
     }
 
     @Test
     fun contagioNoExitoso() {
         Assert.assertTrue(vectorD.enfermedades.isEmpty())
         serviceVect.contagiar(vectorC, vectores)  //Ya los actualiza
-        //val vectorDRecuperadoPost = serviceVect.recuperarVector(vectorD.id!!.toInt()) -Se va a poder usar cuando logremos recuperar enfermedades
-        //Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size) -Se va a poder usar cuando logremos recuperar enfermedades
-        Assert.assertEquals(0,vectorD.enfermedades.size)
+        val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
+        //val vectorDRecuperadoPost = serviceVect.recuperarVector(vectorD.id!!.toInt()) //-Se va a poder usar cuando logremos recuperar enfermedades
+        Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
     }
 
     @After

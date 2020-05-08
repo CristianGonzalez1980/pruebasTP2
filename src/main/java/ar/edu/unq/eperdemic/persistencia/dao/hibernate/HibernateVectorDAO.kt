@@ -32,13 +32,14 @@ open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), Vector
     override fun recuperarEnfermedades(idDelVector: Int): MutableList<Especie> {
         val session = TransactionRunner.currentSession
 
-        val hql = ("select enfermedades_nombre from vector_especie where vector_id = :idVector")
+        val hql = ("SELECT E.enfermedades_id FROM vector_especie E WHERE E.vector_id = :idVector")
 
         val query =  session.createQuery(hql, Especie::class.java)
 
         query.setParameter("idVector" , idDelVector)
-
-        return query.resultList
+        query.list()
+        val result = mutableListOf<Especie>()           //Hay que arreglar esta consulta
+        return result
     }
 
     override fun crearVector(vector: Vector): Vector {

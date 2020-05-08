@@ -13,7 +13,7 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
         val hql = ("from especie where id = idDeLaEspecie")
         val query = session.createQuery(hql, Especie::class.java)
         query.setParameter("idDeLaEspecie", idEspecie)
-        return query.singleResult
+        return query.uniqueResult()
     }
 
     override fun agregarEspecie(idPatogeno: Int, nombreEspecie: String, paisDeOrigen: String, adn: Int): Especie {
