@@ -8,12 +8,18 @@ import javax.persistence.*
 class Especie(): Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null
+
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
     var nombre: String? = null
     var paisDeOrigen: String? = null
 
     @ManyToOne
     var owner: Patogeno? = null
+
+    @ManyToOne
+    var vectores: Vector? = null
 
     var adn: Int? = null  //Una especie obtendra 1 de ADN cada 5 personas infectadas, FALTA IMPLEMENTAR
 
@@ -50,6 +56,6 @@ class Especie(): Serializable {
         if (this === o) return true
         if (o == null || javaClass != o.javaClass) return false
         val especie = o as Especie?
-        return owner!!.id == (especie!!.owner!!).id
+        return this.id == especie!!.id
     }
 }

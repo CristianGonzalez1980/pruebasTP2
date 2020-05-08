@@ -8,12 +8,11 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 
 open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), PatogenoDAO {
 
-    override fun recuperarEspecie(id: Int): Especie {
-        var patogeno = this.recuperar(id)
+    override fun recuperarEspecie(idEspecie: Int): Especie {
         val session = TransactionRunner.currentSession
-        val hql = ("from especie " + " where owner = unPatogeno")
+        val hql = ("from especie where id = idDeLaEspecie")
         val query = session.createQuery(hql, Especie::class.java)
-        query.setParameter("unPatogeno", patogeno)
+        query.setParameter("idDeLaEspecie", idEspecie)
         return query.singleResult
     }
 
@@ -39,9 +38,9 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
         return this.recuperar(idDelPatogeno.toLong())
     }
 
-    override fun actualizar(unPatogeno: Patogeno) {
+    override fun actualizar(patogeno: Patogeno) {
         val session = TransactionRunner.currentSession
-        session.saveOrUpdate(unPatogeno)
+        session.saveOrUpdate(patogeno)
     }
 
     override fun crear(patogeno: Patogeno): Int {

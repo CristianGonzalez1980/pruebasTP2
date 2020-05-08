@@ -16,7 +16,7 @@ class StrategyInsecto : StrategySuperClase() {
     override fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector): Boolean {
         var resultado = false
         if (this.poneEnRiesgoA(vectorAContagiar)) {
-            var enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
+            var enfermedades: MutableList<Especie> = vectorInfectado.enfermedades
             for (e: Especie in enfermedades) {
                 var factorContagio = e.owner?.capacidadContagio
                 var porcentajeDeContagioExitoso = 5 + factorContagio!!

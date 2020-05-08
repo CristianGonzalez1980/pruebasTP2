@@ -2,6 +2,9 @@ package ar.edu.unq.eperdemic.persistencia.dao.hibernate
 
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyAnimal
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInsecto
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
@@ -12,12 +15,30 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), VectorDAO {
 
     override fun recuperar(idDelVector: Int): Vector {
-        return this.recuperar(idDelVector.toLong())
+        val vectorRecuperado = (this.recuperar(idDelVector.toLong()))
+        if (vectorRecuperado.tipo == "Humano") {
+            vectorRecuperado.estrategiaDeContagio = StrategyHumano()
+        }
+        if (vectorRecuperado.tipo == "Animal") {
+            vectorRecuperado.estrategiaDeContagio = StrategyAnimal()
+        }
+        if (vectorRecuperado.tipo == "Insecto") {
+            vectorRecuperado.estrategiaDeContagio = StrategyInsecto()
+        }
+        vectorRecuperado.enfermedades = this.recuperarEnfermedades(idDelVector)
+        return vectorRecuperado
     }
 
-    override fun recuperarEnfermedades(idDelVector: Int): MutableSet<Especie> {
-        val vectorRecuperado = this.recuperar(idDelVector)
-        return vectorRecuperado.enfermedades
+    override fun recuperarEnfermedades(idDelVector: Int): MutableList<Especie> {
+        val session = TransactionRunner.currentSession
+
+        val hql = ("select enfermedades_nombre from vector_especie where vector_id = :idVector")
+
+        val query =  session.createQuery(hql, Especie::class.java)
+
+        query.setParameter("idVector" , idDelVector)
+
+        return query.resultList
     }
 
     override fun crearVector(vector: Vector): Vector {

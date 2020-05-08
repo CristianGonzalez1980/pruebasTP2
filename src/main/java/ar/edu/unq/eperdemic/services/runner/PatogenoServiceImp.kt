@@ -12,9 +12,9 @@ class PatogenoServiceImp(
         private val dataDAO: DataDAO
 ) : PatogenoService {
 
-    override fun recuperarEspecie(id: Int): Especie {
+    override fun recuperarEspecie(idEspecie: Int): Especie {
 
-        return kotlin.run { patogenoDAO.recuperarEspecie(id) }
+        return runTrx { patogenoDAO.recuperarEspecie(idEspecie) }
     }
 
     override fun esPandemia(especieId: Int): Boolean {

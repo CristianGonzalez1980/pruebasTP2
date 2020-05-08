@@ -9,7 +9,7 @@ interface VectorService {
 
     fun contagiar(vectorInfectado: Vector, vectores: List<Vector>)
     fun infectar(vector: Vector, especie: Especie)
-    fun enfermedades(vectorId: Int): MutableSet<Especie>
+    fun enfermedades(vectorId: Int): MutableList<Especie>
 
     /* Operaciones CRUD */
     fun crearVector(vector: Vector): Vector
