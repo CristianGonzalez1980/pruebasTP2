@@ -1,6 +1,8 @@
 package ar.edu.unq.eperdemic.services.runner
 
 import ar.edu.unq.eperdemic.modelo.Especie
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategySuperClase
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
@@ -38,7 +40,7 @@ class VectorServiceImp(
         this.actualizar(vector)
     }
 
-    override fun enfermedades(vectorId: Int): MutableList<Especie> {
+    override fun enfermedades(vectorId: Int): MutableSet<Especie> {
         return runTrx {
             vectorDAO.recuperarEnfermedades(vectorId)
         }

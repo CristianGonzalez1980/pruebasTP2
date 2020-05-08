@@ -16,10 +16,7 @@ class Vector() {
     var location: Ubicacion? = null
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    var enfermedades: MutableList<Especie> = mutableListOf()
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(64)")
-    var tipo: String? = null
+    var enfermedades: MutableSet<Especie> = HashSet()
 
     @Transient
     var estrategiaDeContagio: StrategySuperClase? = null
@@ -33,7 +30,6 @@ class Vector() {
         this.location = location
         location.vectores.add(this)
         this.estrategiaDeContagio = estrategia
-        this.tipo = estrategia.tipo()
     }
 
     fun contagiar(vectorInfectado: Vector, vectores: List<Vector>): MutableList<Vector> {
