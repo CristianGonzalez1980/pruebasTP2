@@ -13,6 +13,7 @@ interface VectorDAO {
     fun recuperar(idDelVector: Int): Vector
     fun recuperarEnfermedades(idDelVector: Int): MutableList<Especie>
     fun eliminar(idDelVector: Int)
+    fun agregarEnfermedad(vectorId: Int, especieId: Int)
     //fun infectar(vector: Vector)
     fun actualizar(vector : Vector): Vector
 }
