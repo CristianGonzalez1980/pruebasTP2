@@ -1,7 +1,6 @@
 package ar.edu.unq.eperdemic.services.runner
 
 
-import ar.edu.unq.eperdemic.modelo.Especie
 import org.hibernate.Session
 
 object TransactionRunner {
@@ -16,7 +15,7 @@ object TransactionRunner {
         }
 
 
-    fun <T> runTrx(bloque: () -> T): T {
+    fun <T> runTrx(bloque: ()->T): T {
         session = SessionFactoryProvider.instance.createSession()
         session.use {
             val tx =  session!!.beginTransaction()

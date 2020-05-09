@@ -1,6 +1,8 @@
 package ar.edu.unq.eperdemic.services.runner
 
 import ar.edu.unq.eperdemic.modelo.Especie
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
+import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategySuperClase
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
@@ -21,12 +23,16 @@ class VectorServiceImp(
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
-            for (vectorAInfectar: Vector in vectores) {
-                if (vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado, vectorAInfectar)) {
-                    for (e: Especie in vectorInfectado.enfermedades) {
-                        this.infectar(vectorAInfectar, e)
+            var vectorInfect = this.recuperarVector(vectorInfectado.id!!.toInt())
+            for (vectorAInfect: Vector in vectores) {
+                var vectorAInfectar = this.recuperarVector(vectorAInfect.id!!.toInt())
+                if (vectorInfect.estrategiaDeContagio!!.darContagio(vectorInfect, vectorAInfectar)) {
+                    for (e: Especie in vectorInfect.enfermedades) {
+                        if (!vectorAInfect.enfermedades.contains(e)) {
+                            this.infectar(vectorAInfectar, e)
+                        }
+                        this.actualizar(vectorAInfectar)
                     }
-                    this.actualizar(vectorAInfectar)
                 }
             }
         }
@@ -39,7 +45,7 @@ class VectorServiceImp(
         vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())
     }
 
-    override fun enfermedades(vectorId: Int): MutableList<Especie> {
+    override fun enfermedades(vectorId: Int): MutableSet<Especie> {
         return runTrx {
             vectorDAO.recuperarEnfermedades(vectorId)
         }
@@ -54,6 +60,10 @@ class VectorServiceImp(
     override fun recuperarVector(vectorId: Int): Vector {
         return runTrx { vectorDAO.recuperar(vectorId) }
     }
+
+/*    fun recuperarVectores(ciudad : String): MutableList<Vector> {
+        return runTrx { vectorDAO.recuperarVectores(ciudad) }
+    }*/
 
     override fun borrarVector(vectorId: Int) {
         runTrx { vectorDAO.eliminar(vectorId) }

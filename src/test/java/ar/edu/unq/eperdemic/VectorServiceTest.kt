@@ -1,5 +1,6 @@
 package ar.edu.unq.eperdemic
 
+import ar.edu.unq.eperdemic.dto.VectorFrontendDTO
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
@@ -55,20 +56,17 @@ class VectorServiceTest {
         patogeno = servicePatog.recuperarPatogeno(id)
         especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
         val ubicacion1 = serviceUbic.crearUbicacion("Argentina")
-        vectorA = Vector(ubicacion1, estrategia)
-        vectorB = Vector(ubicacion1, estrategia)
-        vectorC = Vector(ubicacion1, estrategia1)
-        vectorD = Vector(ubicacion1, estrategia1)
+        vectorA = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
+        vectorB = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
+        vectorC = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
+        vectorD = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
         vectorA.enfermedades.add(especie1)
         vectorC.enfermedades.add(especie1)
-        serviceVect.crearVector(vectorA)
-        serviceVect.crearVector(vectorB)
-        serviceVect.crearVector(vectorC)
-        serviceVect.crearVector(vectorD)
-        //vectorA = serviceVect.recuperarVector(vectorA.id!!.toInt()) //-Se va a poder usar cuando logremos recuperar enfermedades
-        //vectorB = serviceVect.recuperarVector(vectorB.id!!.toInt()) //"                 "               "
-        //vectorC = serviceVect.recuperarVector(vectorC.id!!.toInt()) //"                 "               "
-        //vectorD = serviceVect.recuperarVector(vectorD.id!!.toInt()) //"                 "               "
+
+        vectorA = serviceVect.crearVector(vectorA)
+        vectorB = serviceVect.crearVector(vectorB)
+        vectorC = serviceVect.crearVector(vectorC)
+        vectorD = serviceVect.crearVector(vectorD)
         vectores = ArrayList()
         vectores.add(vectorB)
         vectores.add(vectorD)
@@ -79,18 +77,17 @@ class VectorServiceTest {
     @Test
     fun contagiarExitoso() {
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
-        serviceVect.contagiar(vectorA, vectores)  //Ya los actualiza
+        vectorA.contagiar(vectorC, vectores)
         val vectorBRecuperadoPost = serviceVect.actualizar(vectorB)
-        //val vectorBRecuperadoPost = serviceVect.recuperarVector(vectorB.id!!.toInt()) //-Se va a poder usar cuando logremos recuperar enfermedades
         Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size)
     }
 
     @Test
     fun contagioNoExitoso() {
-        Assert.assertTrue(vectorD.enfermedades.isEmpty())
-        serviceVect.contagiar(vectorC, vectores)  //Ya los actualiza
+
+        Assert.assertTrue(vectorB.enfermedades.isEmpty())
+        serviceVect.contagiar(vectorC, vectores)
         val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
-        //val vectorDRecuperadoPost = serviceVect.recuperarVector(vectorD.id!!.toInt()) //-Se va a poder usar cuando logremos recuperar enfermedades
         Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
     }
 

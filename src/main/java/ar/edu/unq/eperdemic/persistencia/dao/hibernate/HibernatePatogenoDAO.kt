@@ -8,9 +8,10 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 
 open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), PatogenoDAO {
 
-    override fun recuperarEspecie(idEspecie: Int): Especie {
+    override fun recuperarEspecie(id: Int): Especie {
+        var patogeno = this.recuperar(id)
         val session = TransactionRunner.currentSession
-        val hql = ("from especie where id = idDeLaEspecie")
+        val hql = ("from especie " + " where owner = unPatogeno")
         val query = session.createQuery(hql, Especie::class.java)
         query.setParameter("idDeLaEspecie", idEspecie)
         return query.uniqueResult()
@@ -32,15 +33,15 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
         val hql = ("from patogeno p " + "order by p.tipo asc")
         val query = session.createQuery(hql, Patogeno::class.java)
         return query.resultList
-    }
+    }git push --set-upstream origin ultimasimple
 
     override fun recuperar(idDelPatogeno: Int): Patogeno {
         return this.recuperar(idDelPatogeno.toLong())
     }
 
-    override fun actualizar(patogeno: Patogeno) {
+    override fun actualizar(unPatogeno: Patogeno) {
         val session = TransactionRunner.currentSession
-        session.saveOrUpdate(patogeno)
+        session.saveOrUpdate(unPatogeno)
     }
 
     override fun crear(patogeno: Patogeno): Int {
