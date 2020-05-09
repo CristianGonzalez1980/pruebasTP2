@@ -6,7 +6,7 @@ import ar.edu.unq.eperdemic.modelo.Vector
 
 class StrategyHumano : StrategySuperClase() {
     override fun poneEnRiesgoA(vectorRecibido: Vector): Boolean {
-        return ((vectorRecibido.estrategiaDeContagio!!.tipo() == "Humano") || (vectorRecibido.estrategiaDeContagio!!.tipo() == "Insecto"))
+        return ((vectorRecibido.estrategiaDeContagio!!.tipo() == "Persona") || (vectorRecibido.estrategiaDeContagio!!.tipo() == "Insecto"))
     }
 
     override fun tipo(): String {
@@ -19,7 +19,7 @@ class StrategyHumano : StrategySuperClase() {
             var enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
             for (e: Especie in enfermedades) {
                 var factorContagio = e.owner?.capacidadContagio
-                var porcentajeDeContagioExitoso = 5 + factorContagio!!
+                var porcentajeDeContagioExitoso =  + factorContagio!!
                 if (porcentajeDeContagioExitoso > 70) {
                     vectorInfectado.infectar(vectorAContagiar, e)
                     resultado = resultado || true

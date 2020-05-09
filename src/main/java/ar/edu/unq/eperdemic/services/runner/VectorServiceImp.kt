@@ -23,12 +23,16 @@ class VectorServiceImp(
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
-            for (vectorAInfectar: Vector in vectores) {
-                if (vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado, vectorAInfectar)) {
-                    for (e: Especie in vectorInfectado.enfermedades) {
-                        this.infectar(vectorAInfectar, e)
+            var vectorInfect = this.recuperarVector(vectorInfectado.id!!.toInt())
+            for (vectorAInfect: Vector in vectores) {
+                var vectorAInfectar = this.recuperarVector(vectorAInfect.id!!.toInt())
+                if (vectorInfect.estrategiaDeContagio!!.darContagio(vectorInfect, vectorAInfectar)) {
+                    for (e: Especie in vectorInfect.enfermedades) {
+                        if (!vectorAInfect.enfermedades.contains(e)) {
+                            this.infectar(vectorAInfectar, e)
+                        }
+                        this.actualizar(vectorAInfectar)
                     }
-                    this.actualizar(vectorAInfectar)
                 }
             }
         }
@@ -55,6 +59,10 @@ class VectorServiceImp(
     override fun recuperarVector(vectorId: Int): Vector {
         return runTrx { vectorDAO.recuperar(vectorId) }
     }
+
+/*    fun recuperarVectores(ciudad : String): MutableList<Vector> {
+        return runTrx { vectorDAO.recuperarVectores(ciudad) }
+    }*/
 
     override fun borrarVector(vectorId: Int) {
         runTrx { vectorDAO.eliminar(vectorId) }

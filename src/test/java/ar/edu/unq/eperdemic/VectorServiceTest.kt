@@ -1,5 +1,6 @@
 package ar.edu.unq.eperdemic
 
+import ar.edu.unq.eperdemic.dto.VectorFrontendDTO
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
@@ -55,10 +56,10 @@ class VectorServiceTest {
         patogeno = servicePatog.recuperarPatogeno(id)
         especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
         val ubicacion1 = serviceUbic.crearUbicacion("Argentina")
-        vectorA = Vector(ubicacion1, estrategia)
-        vectorB = Vector(ubicacion1, estrategia)
-        vectorC = Vector(ubicacion1, estrategia1)
-        vectorD = Vector(ubicacion1, estrategia1)
+        vectorA = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
+        vectorB = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
+        vectorC = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
+        vectorD = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
         vectorA.enfermedades.add(especie1)
         vectorC.enfermedades.add(especie1)
         vectorA = serviceVect.crearVector(vectorA)

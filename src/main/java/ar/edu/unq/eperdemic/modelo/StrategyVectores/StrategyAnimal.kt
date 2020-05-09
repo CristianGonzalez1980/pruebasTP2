@@ -6,7 +6,7 @@ import ar.edu.unq.eperdemic.modelo.Vector
 
 class StrategyAnimal : StrategySuperClase() {
     override fun poneEnRiesgoA(vectorRecibido: Vector): Boolean {
-        return ((vectorRecibido.estrategiaDeContagio!!.tipo() == "Humano") || (vectorRecibido.estrategiaDeContagio!!.tipo() == "Insecto"))
+        return ((vectorRecibido.estrategiaDeContagio!!.tipo() == "Persona") || (vectorRecibido.estrategiaDeContagio!!.tipo() == "Insecto"))
     }
 
     override fun tipo(): String {

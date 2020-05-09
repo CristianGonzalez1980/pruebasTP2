@@ -15,4 +15,5 @@ interface VectorDAO {
     fun eliminar(idDelVector: Int)
     //fun infectar(vector: Vector)
     fun actualizar(vector : Vector): Vector
+/*    fun recuperarVectores(ciudad: String) : MutableList<Vector>*/
 }

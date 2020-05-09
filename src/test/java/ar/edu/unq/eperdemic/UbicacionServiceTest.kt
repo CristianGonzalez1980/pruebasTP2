@@ -1,5 +1,6 @@
 package ar.edu.unq.eperdemic
 
+import ar.edu.unq.eperdemic.dto.VectorFrontendDTO
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyAnimal
@@ -40,6 +41,7 @@ class UbicacionServiceTest {
     lateinit var estrategia1: StrategyAnimal
     lateinit var patogeno: Patogeno
     lateinit var especie1: Especie
+    lateinit var especie2: Especie
 
     @Before
     fun crearModelo() {
@@ -55,16 +57,17 @@ class UbicacionServiceTest {
         val id = servicePatog.crearPatogeno(patogeno)
         patogeno = servicePatog.recuperarPatogeno(id)
         especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
+        especie2 = patogeno.agregarEspecie("Covid19", "China", 20)
         ubi3 = service.crearUbicacion("La Plata")
         ubi2 = service.crearUbicacion("Quilmes")
-        vectorA = Vector(ubi3, estrategia)
-        vectorB = Vector(ubi2, estrategia)
-        vectorC = Vector(ubi2, estrategia1)
-        vectorD = Vector(ubi3, estrategia1)
-        vectorE = Vector(ubi3, estrategia1)
+        vectorA = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
+        vectorB = Vector(ubi2, VectorFrontendDTO.TipoDeVector.Animal)
+        vectorC = Vector(ubi2, VectorFrontendDTO.TipoDeVector.Animal)
+        vectorD = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
+        vectorE = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
         vectorD = serviceVec.crearVector(vectorD)
         vectorE = serviceVec.crearVector(vectorE)
-        serviceVec.infectar(vectorD, especie1)
+        serviceVec.infectar(vectorD, especie2)
         vectorA = serviceVec.crearVector(vectorA)
         service.actualizar(ubi3)
         vectorB = serviceVec.crearVector(vectorB)
@@ -108,7 +111,7 @@ class UbicacionServiceTest {
         service.expandir("La Plata")
         val vectores: MutableList<Vector> = service.recuperar("La Plata").vectores.toMutableList()
         val totalDeInfectados = vectores.count { it.estaInfectado() }
-        Assert.assertEquals(3, totalDeInfectados)
+        Assert.assertEquals(3, totalDeInfectados)//ya reconoce strategia de todos pero no contagia
     }
 
     @Test
