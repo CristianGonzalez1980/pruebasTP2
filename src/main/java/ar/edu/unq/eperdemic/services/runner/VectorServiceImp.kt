@@ -42,7 +42,7 @@ class VectorServiceImp(
         this.recuperarVector(vector.id!!.toInt())
         vector.enfermedades.add(especie)
         this.actualizar(vector)
-        vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())
+     //   vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())
     }
 
     override fun enfermedades(vectorId: Int): MutableSet<Especie> {
