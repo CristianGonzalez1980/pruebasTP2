@@ -30,10 +30,10 @@ class VectorServiceTest {
     lateinit var vectorB: Vector
     lateinit var vectorC: Vector
     lateinit var vectorD: Vector
-    lateinit var vectorARecuperado : Vector
-    lateinit var vectorBRecuperado : Vector
-    lateinit var vectorCRecuperado : Vector
-    lateinit var vectorDRecuperado : Vector
+    lateinit var vectorARecuperado: Vector
+    lateinit var vectorBRecuperado: Vector
+    lateinit var vectorCRecuperado: Vector
+    lateinit var vectorDRecuperado: Vector
     lateinit var vectores: MutableList<Vector>
     lateinit var especie1: Especie
     lateinit var especie2: Especie
@@ -43,12 +43,11 @@ class VectorServiceTest {
     lateinit var patogeno: Patogeno
 
 
-
     @Before
     fun crearModelo() {
         this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
         this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
-        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(),VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
+        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
         estrategia = StrategyHumano()
         estrategia1 = StrategyAnimal()
         patogeno = Patogeno("Virus", 80, 80, 80)
@@ -69,15 +68,13 @@ class VectorServiceTest {
         vectores = ArrayList()
     }
 
-
-
     @Test
     fun contagioExitoso() {
         vectores.add(vectorB)
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
         serviceVect.contagiar(vectorA, vectores)
         val vectorBRecuperadoPost = serviceVect.actualizar(vectorB)
-        Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size)
+        Assert.assertEquals(1, vectorBRecuperadoPost.enfermedades.size)
     }
 
     @Test
@@ -86,7 +83,7 @@ class VectorServiceTest {
         Assert.assertTrue(vectorD.enfermedades.isEmpty())
         serviceVect.contagiar(vectorC, vectores)
         val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
-        Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
+        Assert.assertEquals(0, vectorDRecuperadoPost.enfermedades.size)
     }
 
     @After

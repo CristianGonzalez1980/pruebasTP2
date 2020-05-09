@@ -20,6 +20,9 @@ class Especie(): Serializable {
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     val mutaciones: MutableList<Mutacion> = ArrayList()
 
+    @ManyToMany
+    var vectores: MutableSet<Vector> = HashSet()
+
     fun tieneMutaciones(mutaciones: List<Mutacion>) : Boolean {         //Corrobora que la especie tenga las mutaciones
         var resultado = true                                            // que requiere la nueva mutacion a adquirir
         for (mutacion: Mutacion in mutaciones){

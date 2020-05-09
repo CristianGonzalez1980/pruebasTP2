@@ -123,8 +123,9 @@ class UbicacionServiceTest {
 
     @After
     fun cleanup() {
+        service.clear()
         //Destroy cierra la session factory y fuerza a que, la proxima vez, una nueva tenga
         //que ser creada.
-        service.clear()
+
     }
 }

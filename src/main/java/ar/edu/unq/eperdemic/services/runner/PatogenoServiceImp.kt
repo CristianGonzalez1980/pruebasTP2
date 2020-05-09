@@ -13,7 +13,6 @@ class PatogenoServiceImp(
 ) : PatogenoService {
 
     override fun recuperarEspecie(id: Int): Especie {
-
         return kotlin.run { patogenoDAO.recuperarEspecie(id) }
     }
 
@@ -26,21 +25,19 @@ class PatogenoServiceImp(
     }
 
     override fun agregarEspecie(id: Int, nombreEspecie: String, paisDeOrigen: String, adn: Int): Especie {
-
-        return  runTrx { patogenoDAO.agregarEspecie(id,nombreEspecie,paisDeOrigen, adn) }
+        return runTrx { patogenoDAO.agregarEspecie(id, nombreEspecie, paisDeOrigen, adn) }
     }
 
-    override fun crearPatogeno(patogeno: Patogeno): Int{
-
+    override fun crearPatogeno(patogeno: Patogeno): Int {
         return runTrx { patogenoDAO.crear(patogeno) }
     }
-    override fun recuperarPatogeno(id: Int): Patogeno {
 
+    override fun recuperarPatogeno(id: Int): Patogeno {
         return runTrx { patogenoDAO.recuperar(id) }
     }
-    override fun recuperarATodosLosPatogenos(): Collection<Patogeno>{
 
-        return runTrx { patogenoDAO.recuperarATodos()}
+    override fun recuperarATodosLosPatogenos(): Collection<Patogeno> {
+        return runTrx { patogenoDAO.recuperarATodos() }
     }
 
     override fun clear() {
