@@ -76,8 +76,7 @@ class UbicacionServiceTest {
     }
 
     @Test
-    fun recuperarId() {
-
+    fun recuperarCantidadDeUbicacion() {
         Assert.assertEquals(3, service.recuperar("La Plata").vectores.size)
     }
 
@@ -86,7 +85,7 @@ class UbicacionServiceTest {
         Assert.assertEquals("La Plata", vectorA.location!!.nombreDeLaUbicacion)
         service.mover(vectorA.id!!.toInt(), "Quilmes")
 
-        var vectorARecuperado = serviceVec.recuperarVector(vectorA.id!!.toInt())
+        val vectorARecuperado = serviceVec.recuperarVector(vectorA.id!!.toInt())
         Assert.assertEquals("Quilmes", vectorARecuperado.location!!.nombreDeLaUbicacion)
     }
 

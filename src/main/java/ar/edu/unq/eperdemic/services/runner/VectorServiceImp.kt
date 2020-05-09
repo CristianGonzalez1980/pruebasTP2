@@ -35,7 +35,7 @@ class VectorServiceImp(
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
-        vector.infectar(vector, especie)
+        //vector.infectar(vector, especie)
         this.actualizar(vector)
      //   vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())     AGREGAR ENFERMEDAD A LA TABLA DE LA RELACION
     }

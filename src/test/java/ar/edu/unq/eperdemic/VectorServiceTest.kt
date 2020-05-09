@@ -64,9 +64,8 @@ class VectorServiceTest {
         vectorB = serviceVect.crearVector(vectorB)
         vectorC = serviceVect.crearVector(vectorC)
         vectorD = serviceVect.crearVector(vectorD)
-        serviceVect.infectar(vectorA, especie1)
-        serviceVect.infectar(vectorC, especie1)
-        vectorA = serviceVect.recuperarVector(vectorA.id!!.toInt()) //Para probar recuperar vector
+        vectorA.enfermedades.add(especie1)
+        vectorC.enfermedades.add(especie1)
         vectores = ArrayList()
     }
 

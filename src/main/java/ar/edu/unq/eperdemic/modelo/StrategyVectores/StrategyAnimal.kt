@@ -21,7 +21,7 @@ class StrategyAnimal : StrategySuperClase() {
                 val factorContagio = e.owner?.capacidadContagio
                 val porcentajeDeContagioExitoso = 5 + factorContagio!!
                 if ((porcentajeDeContagioExitoso > 70) and (!vectorAContagiar.enfermedades.contains(e))) {
-                    vectorAContagiar.infectar(vectorAContagiar, e)
+                    vectorInfectado.infectar(vectorAContagiar, e)
                     enfermedadesContagiadas.add(e)
                 }
             }

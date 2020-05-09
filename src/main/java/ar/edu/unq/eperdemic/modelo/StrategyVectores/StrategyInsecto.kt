@@ -21,6 +21,7 @@ class StrategyInsecto : StrategySuperClase() {
                 val factorContagio = e.owner?.capacidadContagio
                 val porcentajeDeContagioExitoso = 5 + factorContagio!!
                 if ((porcentajeDeContagioExitoso > 70) and (!vectorAContagiar.enfermedades.contains(e))) {
+                    vectorInfectado.infectar(vectorAContagiar, e)
                     enfermedadesContagiadas.add(e)
                 }
             }
