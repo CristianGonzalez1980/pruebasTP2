@@ -9,9 +9,9 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), PatogenoDAO {
 
     override fun recuperarEspecie(id: Int): Especie {
-     //   var patogeno = this.recuperar(id)
+       // var patogeno = this.recuperar(id)
         val session = TransactionRunner.currentSession
-        val hql = ("from especie " + " where owner = unPatogeno")
+        val hql = ("from especie " + " where id = :id")
         val query = session.createQuery(hql, Especie::class.java)
         query.setParameter("idDeLaEspecie", id)
         return query.uniqueResult()

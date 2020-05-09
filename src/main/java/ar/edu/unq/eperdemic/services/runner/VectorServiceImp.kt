@@ -6,7 +6,11 @@ import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategySuperClase
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
+import ar.edu.unq.eperdemic.persistencia.dao.EspecieDAO
+import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateEspecieDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
 import ar.edu.unq.eperdemic.services.VectorService
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 import net.bytebuddy.implementation.bind.annotation.RuntimeType
@@ -14,7 +18,8 @@ import java.lang.RuntimeException
 
 class VectorServiceImp(
         private val vectorDAO: VectorDAO,
-        private val dataDAO: DataDAO
+        private val dataDAO: DataDAO,
+        private val especieDAO: EspecieDAO
 ) : VectorService {
 
     override fun actualizar(vector: Vector): Vector {
@@ -25,19 +30,24 @@ class VectorServiceImp(
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
+            val vectorInf: Vector = vectorDAO.recuperar(vectorInfectado.id!!.toInt())
             for (vectorAInfect: Vector in vectores) {
-                val enfermedadesAContagiar = vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado, vectorAInfect)
-                for (enfermedad in enfermedadesAContagiar) {
-                    this.infectar(vectorAInfect, enfermedad)
-                }
+                val vectorAContagiar = vectorDAO.recuperar(vectorAInfect.id!!.toInt())
+                vectorInf.estrategiaDeContagio!!.darContagio(vectorInf, vectorAContagiar)
+                vectorDAO.actualizar(vectorAContagiar)
             }
+            vectorDAO.actualizar(vectorInf)
         }
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
-        //vector.infectar(vector, especie)
-        this.actualizar(vector)
-     //   vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())     AGREGAR ENFERMEDAD A LA TABLA DE LA RELACION
+        runTrx {
+            var vectorRec: Vector = vectorDAO.recuperar(vector.id!!.toInt())
+            var especieRec: Especie = especieDAO.recuperarEspecie(especie.id!!.toInt())
+            vector.estrategiaDeContagio!!.infectar(vectorRec, especieRec)
+            vectorDAO.actualizar(vectorRec)
+            //entiendo que la especie se actualizaaaaa
+        }
     }
 
     override fun enfermedades(vectorId: Int): MutableSet<Especie> {
@@ -55,10 +65,6 @@ class VectorServiceImp(
     override fun recuperarVector(vectorId: Int): Vector {
         return runTrx { vectorDAO.recuperar(vectorId) }
     }
-
-/*    fun recuperarVectores(ciudad : String): MutableList<Vector> {
-        return runTrx { vectorDAO.recuperarVectores(ciudad) }
-    }*/
 
     override fun borrarVector(vectorId: Int) {
         runTrx { vectorDAO.eliminar(vectorId) }

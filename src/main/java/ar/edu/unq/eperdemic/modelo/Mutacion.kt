@@ -18,16 +18,16 @@ class Mutacion() {
     @ManyToOne
     var owner: Especie? = null
 
-    constructor(owner:Especie ,puntos: Int) : this() {
+    constructor(owner: Especie, puntos: Int) : this() {
         this.puntosAdnNecesarios = puntos
         this.owner = owner
     }
 
-    fun getAdnNecesario () : Int? {
+    fun getAdnNecesario(): Int? {
         return (this.puntosAdnNecesarios)
     }
 
-    fun mutacionesNecesarias () : List<Mutacion> {
+    fun mutacionesNecesarias(): List<Mutacion> {
         return (this.mutacionesNecesarias)
     }
 

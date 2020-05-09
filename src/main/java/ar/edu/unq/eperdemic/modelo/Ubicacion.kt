@@ -9,6 +9,7 @@ class Ubicacion() {
     @Id
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
     var nombreDeLaUbicacion: String? = null
+
     @OneToMany(mappedBy = "location", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var vectores: MutableSet<Vector> = HashSet()
 
@@ -16,7 +17,7 @@ class Ubicacion() {
         this.nombreDeLaUbicacion = nombreUbicacion
     }
 
-    fun alojarVector(vector: Vector) : Ubicacion {
+    fun alojarVector(vector: Vector): Ubicacion {
         this.vectores.add(vector)
         val ubicacionAnterior = vector.location
         vector.location!!.desAlojarVector(vector)
@@ -26,7 +27,6 @@ class Ubicacion() {
 
     fun desAlojarVector(vector: Vector) {
         this.vectores.remove(vector)
-
     }
 
     override fun toString(): String {

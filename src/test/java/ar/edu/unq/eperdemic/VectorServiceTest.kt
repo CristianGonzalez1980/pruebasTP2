@@ -8,10 +8,7 @@ import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyAnimal
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInsecto
 import ar.edu.unq.eperdemic.modelo.Ubicacion
 import ar.edu.unq.eperdemic.modelo.Vector
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateVectorDAO
-import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateUbicacionDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.*
 import ar.edu.unq.eperdemic.services.PatogenoService
 import ar.edu.unq.eperdemic.services.runner.PatogenoServiceImp
 import ar.edu.unq.eperdemic.services.runner.UbicacionServiceImp
@@ -46,14 +43,16 @@ class VectorServiceTest {
     @Before
     fun crearModelo() {
         this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
-        this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
-        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
+        this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())
+        this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO()))
+        serviceVect.clear()
         estrategia = StrategyHumano()
         estrategia1 = StrategyAnimal()
         patogeno = Patogeno("Virus", 80, 80, 80)
         val id = servicePatog.crearPatogeno(patogeno)
         patogeno = servicePatog.recuperarPatogeno(id)
         especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
+        val mosquito = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Dengue", "Argentina", 15)
         val ubicacion1 = serviceUbic.crearUbicacion("Argentina")
         vectorA = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
         vectorB = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
@@ -63,7 +62,7 @@ class VectorServiceTest {
         vectorB = serviceVect.crearVector(vectorB)
         vectorC = serviceVect.crearVector(vectorC)
         vectorD = serviceVect.crearVector(vectorD)
-        vectorA.enfermedades.add(especie1)
+        serviceVect.infectar(vectorA, mosquito)
         vectorC.enfermedades.add(especie1)
         vectores = ArrayList()
     }
@@ -73,7 +72,7 @@ class VectorServiceTest {
         vectores.add(vectorB)
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
         serviceVect.contagiar(vectorA, vectores)
-        val vectorBRecuperadoPost = serviceVect.actualizar(vectorB)
+        val vectorBRecuperadoPost = serviceVect.recuperarVector(vectorB.id!!.toInt())
         Assert.assertEquals(1, vectorBRecuperadoPost.enfermedades.size)
     }
 
@@ -92,5 +91,4 @@ class VectorServiceTest {
         //que ser creada.
         serviceVect.clear()
     }
-
 }

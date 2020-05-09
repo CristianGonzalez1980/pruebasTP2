@@ -33,9 +33,9 @@ open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), Vector
     override fun agregarEnfermedad(vectorId: Int, especieId: Int) {
         val session = TransactionRunner.currentSession
         val hql = ("insert into vector_especie(:idDelVector, :idDeLaEspecie)")
-        val query =  session.createQuery(hql)
-        query.setParameter("idDelVector" , vectorId)
-        query.setParameter("idDeLaEspecie" , especieId)
+        val query = session.createQuery(hql)
+        query.setParameter("idDelVector", vectorId)
+        query.setParameter("idDeLaEspecie", especieId)
         query.executeUpdate()
     }
 
@@ -52,12 +52,4 @@ open class HibernateVectorDAO : HibernateDAO<Vector>(Vector::class.java), Vector
         session.saveOrUpdate(vector)
         return this.recuperar(vector.id)
     }
-
-/*    override fun recuperarVectores(ciudad : String) : MutableList<Vector> {
-        val session = TransactionRunner.currentSession
-        val hql = ("from vector v " + "where location_nombreDeLaUbicacion = :ciudad")
-        val query = session.createQuery(hql, Vector::class.java)
-        query.setParameter("ciudad", ciudad)
-        return query.resultList.toMutableSet().toMutableList()
-    }*/
 }

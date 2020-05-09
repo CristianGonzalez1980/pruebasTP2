@@ -4,20 +4,21 @@ import ar.edu.unq.eperdemic.modelo.Especie
 import java.util.*
 import ar.edu.unq.eperdemic.modelo.Vector
 
-
 open class StrategySuperClase() {
 
-    open fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector): MutableList<Especie> {
-        val enfermedadesContagiadas = mutableListOf<Especie>()
+    open fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector) {
         val enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
         for (e: Especie in enfermedades) {
             val factorContagio = e.owner?.capacidadContagio
             val porcentajeDeContagioExitoso = 5 + factorContagio!!
             if ((porcentajeDeContagioExitoso > 70) and (!vectorAContagiar.enfermedades.contains(e))) {
-                vectorInfectado.infectar(vectorAContagiar, e)
-                enfermedadesContagiadas.add(e)
+                this.infectar(vectorAContagiar, e)
             }
         }
-        return enfermedadesContagiadas
+    }
+
+    fun infectar(vector: Vector, especie: Especie) {
+        vector.enfermedades.add(especie)
+        especie.vectores.add(vector)
     }
 }

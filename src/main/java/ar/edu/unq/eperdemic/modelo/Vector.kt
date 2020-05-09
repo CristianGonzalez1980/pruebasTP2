@@ -36,11 +36,6 @@ class Vector() {
         this.initEstrategia()
     }
 
-    fun infectar(vector: Vector, especie: Especie) {
-        vector.enfermedades.add(especie)
-        especie.vectores.add(this)
-    }
-
     fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         for (v: Vector in vectores) {
             estrategiaDeContagio?.darContagio(vectorInfectado, v)!!

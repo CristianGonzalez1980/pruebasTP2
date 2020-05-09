@@ -7,7 +7,7 @@ import ar.edu.unq.eperdemic.services.runner.TransactionRunner
 
 open class HibernateUbicacionDAO : HibernateDAO<Ubicacion>(Ubicacion::class.java), UbicacionDAO {
 
-    override fun crear(ubicacion: Ubicacion) : Ubicacion{
+    override fun crear(ubicacion: Ubicacion): Ubicacion {
         this.guardar(ubicacion)
         return this.recuperar(ubicacion.nombreDeLaUbicacion!!)
     }
@@ -24,9 +24,4 @@ open class HibernateUbicacionDAO : HibernateDAO<Ubicacion>(Ubicacion::class.java
         val session = TransactionRunner.currentSession
         session.saveOrUpdate(ubicacion)
     }
-
-
-
-
-
 }

@@ -46,10 +46,11 @@ class UbicacionServiceTest {
     @Before
     fun crearModelo() {
         this.service = UbicacionServiceImp(HibernateUbicacionDAO(),
-                HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO()))
-        this.serviceVec = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO())
+                HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO()))
+        this.serviceVec = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())
         this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
 
+        service.clear()
         //ubi1 = service.crearUbicacion("Bernal" )
         estrategia = StrategyHumano()
         estrategia1 = StrategyAnimal()
@@ -58,16 +59,17 @@ class UbicacionServiceTest {
         patogeno = servicePatog.recuperarPatogeno(id)
         especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
         especie2 = patogeno.agregarEspecie("Covid19", "China", 20)
+        var esp2Pers = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Hanta Virus", "EE:UU", 30)
         ubi3 = service.crearUbicacion("La Plata")
         ubi2 = service.crearUbicacion("Quilmes")
         vectorA = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
         vectorB = Vector(ubi2, VectorFrontendDTO.TipoDeVector.Animal)
-        vectorC = Vector(ubi2, VectorFrontendDTO.TipoDeVector.Animal)
+        vectorC = Vector(ubi2, VectorFrontendDTO.TipoDeVector.Persona)
         vectorD = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
         vectorE = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
         vectorD = serviceVec.crearVector(vectorD)
         vectorE = serviceVec.crearVector(vectorE)
-        serviceVec.infectar(vectorD, especie2)
+        serviceVec.infectar(vectorD, esp2Pers)
         vectorA = serviceVec.crearVector(vectorA)
         service.actualizar(ubi3)
         vectorB = serviceVec.crearVector(vectorB)
@@ -94,7 +96,7 @@ class UbicacionServiceTest {
         service.mover(vectorD.id!!.toInt(), "Quilmes")
         val vectores: MutableList<Vector> = service.recuperar("Quilmes").vectores.toMutableList()
         val totalDeInfectados = vectores.count { it.estaInfectado() }
-        Assert.assertEquals(3, totalDeInfectados)
+        Assert.assertEquals(2, totalDeInfectados)
     }
 
     @Test
@@ -126,6 +128,5 @@ class UbicacionServiceTest {
         service.clear()
         //Destroy cierra la session factory y fuerza a que, la proxima vez, una nueva tenga
         //que ser creada.
-
     }
 }

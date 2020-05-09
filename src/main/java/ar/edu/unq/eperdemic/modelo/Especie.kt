@@ -1,13 +1,17 @@
 package ar.edu.unq.eperdemic.modelo
+
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
 @Entity(name = "especie")
 @Table(name = "especie")
-class Especie(): Serializable {
+class Especie() : Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(64)")
     var nombre: String? = null
     var paisDeOrigen: String? = null
@@ -23,9 +27,9 @@ class Especie(): Serializable {
     @ManyToMany
     var vectores: MutableSet<Vector> = HashSet()
 
-    fun tieneMutaciones(mutaciones: List<Mutacion>) : Boolean {         //Corrobora que la especie tenga las mutaciones
+    fun tieneMutaciones(mutaciones: List<Mutacion>): Boolean {         //Corrobora que la especie tenga las mutaciones
         var resultado = true                                            // que requiere la nueva mutacion a adquirir
-        for (mutacion: Mutacion in mutaciones){
+        for (mutacion: Mutacion in mutaciones) {
             resultado = (resultado and this.mutaciones.contains(mutacion))
         }
         return resultado

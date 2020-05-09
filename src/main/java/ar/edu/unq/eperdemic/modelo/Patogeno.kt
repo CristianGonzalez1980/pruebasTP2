@@ -6,11 +6,12 @@ import javax.persistence.*
 
 @Entity(name = "patogeno")
 @Table(name = "patogeno")
-class Patogeno(){
+class Patogeno() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
     @Column(nullable = false, length = 500)
     var tipo: String? = null
 
@@ -51,7 +52,7 @@ class Patogeno(){
         return this.tipo!!
     }
 
-    fun agregarEspecie(nombreEspecie: String, paisDeOrigen: String, adn: Int) : Especie{
+    fun agregarEspecie(nombreEspecie: String, paisDeOrigen: String, adn: Int): Especie {
         val nuevaEspecie: Especie = Especie(this, nombreEspecie, paisDeOrigen, adn)
         this.especies.add(nuevaEspecie)
         return nuevaEspecie

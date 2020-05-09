@@ -21,13 +21,12 @@ class UbicacionServiceImp(
             var vector = vectorDAO.recuperar(vectorId)
             var ubicacionNueva = ubicacionDAO.recuperar(nombreUbicacion)
             var ubicacionVieja = ubicacionNueva.alojarVector(vector)
-            if (vector.estaInfectado()) {
-        //        var vectoresAInfectar = vectorServiceImp.recuperarVectores(nombreUbicacion)
-                vectorServiceImp.contagiar(vector, ubicacionNueva.vectores.toList())
-            }
+            vectorDAO.actualizar(vector)
             ubicacionDAO.actualizar(ubicacionVieja)
             ubicacionDAO.actualizar(ubicacionNueva)
-            vectorDAO.actualizar(vector)
+            if (vector.estaInfectado()) {
+                vectorServiceImp.contagiar(vector, ubicacionNueva.vectores.toList())
+            }
         }
     }
 
