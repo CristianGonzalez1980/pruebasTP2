@@ -7,8 +7,6 @@ import ar.edu.unq.eperdemic.modelo.Vector
 
 open class StrategySuperClase() {
 
-    //  abstract fun poneEnRiesgoA(vectorRecibido: Vector) : Boolean
-    // abstract fun tipo(): String //ya esta preguntando por el ENUM
     open fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector): MutableList<Especie> {
         val enfermedadesContagiadas = mutableListOf<Especie>()
         val enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
