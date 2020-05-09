@@ -5,6 +5,7 @@ import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyAnimal
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyHumano
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategyInsecto
 import ar.edu.unq.eperdemic.modelo.StrategyVectores.StrategySuperClase
+import java.lang.RuntimeException
 import javax.persistence.*
 import javax.transaction.Transactional
 import kotlin.jvm.Transient
@@ -43,14 +44,10 @@ class Vector() {
         this.initEstrategia()
     }
 
-    fun contagiar(vectorInfectado: Vector, vectores: List<Vector>): MutableList<Vector> {
-        val listaResultante: MutableList<Vector> = mutableListOf()
+    fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         for (v: Vector in vectores) {
-            if (estrategiaDeContagio?.darContagio(vectorInfectado, v)!!) {
-                listaResultante.add(v)
-            }
+            estrategiaDeContagio?.darContagio(vectorInfectado, v)!!
         }
-        return listaResultante
     }
 
     fun cambiarDeUbicacion(ubicacion: Ubicacion) {

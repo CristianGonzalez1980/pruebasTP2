@@ -9,6 +9,8 @@ import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.VectorDAO
 import ar.edu.unq.eperdemic.services.VectorService
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
+import net.bytebuddy.implementation.bind.annotation.RuntimeType
+import java.lang.RuntimeException
 
 class VectorServiceImp(
         private val vectorDAO: VectorDAO,
@@ -23,26 +25,19 @@ class VectorServiceImp(
 
     override fun contagiar(vectorInfectado: Vector, vectores: List<Vector>) {
         runTrx {
-            var vectorInfect = this.recuperarVector(vectorInfectado.id!!.toInt())
             for (vectorAInfect: Vector in vectores) {
-                var vectorAInfectar = this.recuperarVector(vectorAInfect.id!!.toInt())
-                if (vectorInfect.estrategiaDeContagio!!.darContagio(vectorInfect, vectorAInfectar)) {
-                    for (e: Especie in vectorInfect.enfermedades) {
-                        if (!vectorAInfect.enfermedades.contains(e)) {
-                            this.infectar(vectorAInfectar, e)
-                        }
-                        this.actualizar(vectorAInfectar)
-                    }
+                val enfermedadesAContagiar = vectorInfectado.estrategiaDeContagio!!.darContagio(vectorInfectado, vectorAInfect)
+                for (enfermedad in enfermedadesAContagiar) {
+                    this.infectar(vectorAInfect, enfermedad)
                 }
             }
         }
     }
 
     override fun infectar(vector: Vector, especie: Especie) {
-        this.recuperarVector(vector.id!!.toInt())
-        vector.enfermedades.add(especie)
+        vector.infectar(vector, especie)
         this.actualizar(vector)
-     //   vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())
+     //   vectorDAO.agregarEnfermedad(vector.id!!.toInt(), especie.id!!.toInt())     AGREGAR ENFERMEDAD A LA TABLA DE LA RELACION
     }
 
     override fun enfermedades(vectorId: Int): MutableSet<Especie> {

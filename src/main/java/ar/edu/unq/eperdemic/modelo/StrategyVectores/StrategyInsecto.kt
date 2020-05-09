@@ -13,19 +13,18 @@ class StrategyInsecto : StrategySuperClase() {
         return "Insecto"
     }
 
-    override fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector): Boolean {
-        var resultado = false
+    override fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector) : MutableList<Especie> {
+        val enfermedadesContagiadas = mutableListOf<Especie>()
         if (this.poneEnRiesgoA(vectorAContagiar)) {
-            var enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
+            val enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
             for (e: Especie in enfermedades) {
-                var factorContagio = e.owner?.capacidadContagio
-                var porcentajeDeContagioExitoso = 5 + factorContagio!!
-                if (porcentajeDeContagioExitoso > 70) {
-                    vectorInfectado.infectar(vectorAContagiar, e)
-                    resultado = resultado || true
+                val factorContagio = e.owner?.capacidadContagio
+                val porcentajeDeContagioExitoso = 5 + factorContagio!!
+                if ((porcentajeDeContagioExitoso > 70) and (!vectorAContagiar.enfermedades.contains(e))) {
+                    enfermedadesContagiadas.add(e)
                 }
             }
         }
-        return resultado
+        return enfermedadesContagiadas
     }
 }

@@ -60,32 +60,31 @@ class VectorServiceTest {
         vectorB = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
         vectorC = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
         vectorD = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
-        vectorA.enfermedades.add(especie1)
-        vectorC.enfermedades.add(especie1)
-
         vectorA = serviceVect.crearVector(vectorA)
         vectorB = serviceVect.crearVector(vectorB)
         vectorC = serviceVect.crearVector(vectorC)
         vectorD = serviceVect.crearVector(vectorD)
+        serviceVect.infectar(vectorA, especie1)
+        serviceVect.infectar(vectorC, especie1)
+        vectorA = serviceVect.recuperarVector(vectorA.id!!.toInt()) //Para probar recuperar vector
         vectores = ArrayList()
-        vectores.add(vectorB)
-        vectores.add(vectorD)
     }
 
 
 
     @Test
-    fun contagiarExitoso() {
+    fun contagioExitoso() {
+        vectores.add(vectorB)
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
-        vectorA.contagiar(vectorC, vectores)
+        serviceVect.contagiar(vectorA, vectores)
         val vectorBRecuperadoPost = serviceVect.actualizar(vectorB)
         Assert.assertEquals(1,vectorBRecuperadoPost.enfermedades.size)
     }
 
     @Test
     fun contagioNoExitoso() {
-
-        Assert.assertTrue(vectorB.enfermedades.isEmpty())
+        vectores.add(vectorD)
+        Assert.assertTrue(vectorD.enfermedades.isEmpty())
         serviceVect.contagiar(vectorC, vectores)
         val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
         Assert.assertEquals(0,vectorDRecuperadoPost.enfermedades.size)
