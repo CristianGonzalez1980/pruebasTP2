@@ -39,7 +39,6 @@ class Vector() {
     constructor(location: Ubicacion, tipoDeVector: VectorFrontendDTO.TipoDeVector) : this() {
         this.location = location
         location.vectores.add(this)
-      //  this.estrategiaDeContagio = estrategia
         this.tipo = tipoDeVector
         this.initEstrategia()
     }

@@ -5,16 +5,22 @@ import ar.edu.unq.eperdemic.modelo.Vector
 
 
 class StrategyInsecto : StrategySuperClase() {
-    override fun poneEnRiesgoA(vectorRecibido: Vector): Boolean {
-        return ((vectorRecibido.estrategiaDeContagio!!.tipo() == "Animal") || (vectorRecibido.estrategiaDeContagio!!.tipo() == "Persona"))
+    fun poneEnRiesgoA(vectorRecibido: Vector): Boolean {
+        return ((vectorRecibido.tipo!!.name /*estrategiaDeContagio!!.tipo()*/ == "Animal") || (vectorRecibido.tipo!!.name/*.estrategiaDeContagio!!.tipo()*/ == "Persona"))
     }
 
-    override fun tipo(): String {
+/*    override fun tipo(): String { ya esta preguntado por el ENUM
         return "Insecto"
-    }
+    }*/
 
     override fun darContagio(vectorInfectado: Vector, vectorAContagiar: Vector) : MutableList<Especie> {
-        val enfermedadesContagiadas = mutableListOf<Especie>()
+        return if (this.poneEnRiesgoA(vectorAContagiar)) {
+            super.darContagio(vectorInfectado, vectorAContagiar)
+        } else mutableListOf()
+
+/*
+
+ val enfermedadesContagiadas = mutableListOf<Especie>()
         if (this.poneEnRiesgoA(vectorAContagiar)) {
             val enfermedades: MutableSet<Especie> = vectorInfectado.enfermedades
             for (e: Especie in enfermedades) {
@@ -26,6 +32,6 @@ class StrategyInsecto : StrategySuperClase() {
                 }
             }
         }
-        return enfermedadesContagiadas
+        return enfermedadesContagiadas*/
     }
 }

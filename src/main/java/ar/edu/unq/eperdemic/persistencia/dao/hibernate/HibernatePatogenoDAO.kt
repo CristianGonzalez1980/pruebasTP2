@@ -21,11 +21,9 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
         var patogeno = this.recuperar(idPatogeno)
         val especie = Especie(patogeno,nombreEspecie,paisDeOrigen, adn)
         patogeno.agregarEspecie(especie)
-
         val session = TransactionRunner.currentSession
         session.save(especie)
         return especie
-
     }
 
     override fun recuperarATodos(): List<Patogeno> {
