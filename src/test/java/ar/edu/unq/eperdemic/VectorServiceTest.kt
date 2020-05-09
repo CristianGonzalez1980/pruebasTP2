@@ -62,6 +62,7 @@ class VectorServiceTest {
         vectorD = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
         vectorA.enfermedades.add(especie1)
         vectorC.enfermedades.add(especie1)
+
         vectorA = serviceVect.crearVector(vectorA)
         vectorB = serviceVect.crearVector(vectorB)
         vectorC = serviceVect.crearVector(vectorC)
@@ -83,6 +84,7 @@ class VectorServiceTest {
 
     @Test
     fun contagioNoExitoso() {
+
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
         serviceVect.contagiar(vectorC, vectores)
         val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)

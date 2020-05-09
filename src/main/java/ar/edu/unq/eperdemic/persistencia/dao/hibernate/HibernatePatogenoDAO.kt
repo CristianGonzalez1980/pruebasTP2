@@ -13,8 +13,8 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
         val session = TransactionRunner.currentSession
         val hql = ("from especie " + " where owner = unPatogeno")
         val query = session.createQuery(hql, Especie::class.java)
-        query.setParameter("unPatogeno", patogeno)
-        return query.singleResult
+        query.setParameter("idDeLaEspecie", idEspecie)
+        return query.uniqueResult()
     }
 
     override fun agregarEspecie(idPatogeno: Int, nombreEspecie: String, paisDeOrigen: String, adn: Int): Especie {
@@ -33,7 +33,7 @@ open class HibernatePatogenoDAO : HibernateDAO<Patogeno>(Patogeno::class.java), 
         val hql = ("from patogeno p " + "order by p.tipo asc")
         val query = session.createQuery(hql, Patogeno::class.java)
         return query.resultList
-    }
+    }git push --set-upstream origin ultimasimple
 
     override fun recuperar(idDelPatogeno: Int): Patogeno {
         return this.recuperar(idDelPatogeno.toLong())

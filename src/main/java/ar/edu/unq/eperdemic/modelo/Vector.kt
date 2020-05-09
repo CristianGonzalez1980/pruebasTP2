@@ -22,8 +22,10 @@ class Vector() {
     @ManyToOne
     var location: Ubicacion? = null
 
+
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var enfermedades: MutableSet<Especie> = HashSet()
+
 
     @Transient
     var estrategiaDeContagio: StrategySuperClase? = null
