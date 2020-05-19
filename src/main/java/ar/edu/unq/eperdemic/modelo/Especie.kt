@@ -21,9 +21,7 @@ class Especie() : Serializable {
 
     var adn: Int = 0  //Una especie obtendra 1 de ADN cada 5 personas infectadas, FALTA IMPLEMENTAR
 
-/*
     var countIncAdn: Int = 0
-*/
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     val mutaciones: MutableList<Mutacion> = ArrayList()
@@ -46,13 +44,13 @@ class Especie() : Serializable {
         }
     }
 
-/*    fun sumarAdn() {
+    fun sumarAdn() {
         ++countIncAdn
         if (this.countIncAdn == 5) {
             ++adn
             countIncAdn = 0
         }
-    }*/
+    }
 
     constructor(owner: Patogeno, nombre: String, paisDeOrigen: String, cantidadAdn: Int) : this() {
         this.owner = owner

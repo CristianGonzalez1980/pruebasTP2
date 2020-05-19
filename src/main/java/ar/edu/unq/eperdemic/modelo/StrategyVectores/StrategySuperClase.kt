@@ -21,6 +21,6 @@ open class StrategySuperClase() {
     fun infectar(vector: Vector, especie: Especie) {
         vector.enfermedades.add(especie)
         especie.vectores.add(vector)
-/*        especie.sumarAdn()*/
+        especie.sumarAdn()
     }
 }
