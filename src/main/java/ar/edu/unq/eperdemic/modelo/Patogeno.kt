@@ -12,7 +12,7 @@ class Patogeno() {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, unique = true, length = 500)
     var tipo: String? = null
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)

@@ -67,14 +67,14 @@ class UbicacionDaoTest {
     }
 
     @Test
-    fun chequeoDeGuardarUbicaciones() {
+    fun sePruebaCrearUbicacion() {
         serviceUbi.crearUbicacion(ubicacionC.nombreDeLaUbicacion!!)//"Tolosa"
         var ubiGuardada: Ubicacion = serviceUbi.recuperar(ubicacionC.nombreDeLaUbicacion!!)
         Assert.assertEquals(ubicacionC.nombreDeLaUbicacion, ubiGuardada.nombreDeLaUbicacion)
     }
 
     @Test
-    fun seAsientanVectoresEnLaUbicacion() {
+    fun sePruebaActualizaryRecuperarAsentandoVectoresEnLaUbicacion() {
         var ubicacionAnterior: Ubicacion = ubicacionA.alojarVector(vectorB)//De City Bell a La plata
         var ubicacionAnterior2: Ubicacion = ubicacionA.alojarVector(vectorC)//De City Bell a La plata
         serviceUbi.actualizar(ubicacionAnterior)
@@ -86,7 +86,7 @@ class UbicacionDaoTest {
     }
 
     @Test
-    fun moverDeUbicacionVectores() {
+    fun sePruebaActualizaryRecuperarmoverDeUbicacionVectores() {
         serviceUbi.crearUbicacion(ubicacionD.nombreDeLaUbicacion!!)//se persiste Ringuelet
         var ringuelet: Ubicacion = serviceUbi.recuperar(ubicacionD.nombreDeLaUbicacion!!)//se recupera Ringuelet
         var ubiAnterior = ringuelet.alojarVector(vectorC)//De City Bell a Ringuelet

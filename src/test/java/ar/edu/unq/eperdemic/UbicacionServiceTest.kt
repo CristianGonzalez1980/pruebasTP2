@@ -42,6 +42,7 @@ class UbicacionServiceTest {
     lateinit var patogeno: Patogeno
     lateinit var especie1: Especie
     lateinit var especie2: Especie
+    lateinit var esp2Pers: Especie
 
     @Before
     fun crearModelo() {
@@ -57,9 +58,9 @@ class UbicacionServiceTest {
         patogeno = Patogeno("Virus", 80, 80, 80)
         val id = servicePatog.crearPatogeno(patogeno)
         patogeno = servicePatog.recuperarPatogeno(id)
-        especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
-        especie2 = patogeno.agregarEspecie("Covid19", "China", 20)
-        var esp2Pers = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Hanta Virus", "EE:UU", 30)
+        especie1 = servicePatog.agregarEspecie(patogeno.id!!.toInt(),"Dengue", "Argentina", 15)
+        especie2 = servicePatog.agregarEspecie(patogeno.id!!.toInt(),"Covid19", "China", 20)
+        esp2Pers = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Hanta Virus", "EE:UU", 30)
         ubi3 = service.crearUbicacion("La Plata")
         ubi2 = service.crearUbicacion("Quilmes")
         vectorA = Vector(ubi3, VectorFrontendDTO.TipoDeVector.Persona)
@@ -70,6 +71,8 @@ class UbicacionServiceTest {
         vectorD = serviceVec.crearVector(vectorD)
         vectorE = serviceVec.crearVector(vectorE)
         serviceVec.infectar(vectorD, esp2Pers)
+        serviceVec.infectar(vectorD, especie1)
+        serviceVec.infectar(vectorD, especie2)
         vectorA = serviceVec.crearVector(vectorA)
         service.actualizar(ubi3)
         vectorB = serviceVec.crearVector(vectorB)
@@ -78,12 +81,12 @@ class UbicacionServiceTest {
     }
 
     @Test
-    fun recuperarCantidadDeUbicacion() {
+    fun recuperarCantidadDeVectoresEnUbicacion() {
         Assert.assertEquals(3, service.recuperar("La Plata").vectores.size)
     }
 
     @Test
-    fun cambioDeUbicacion() {
+    fun VerificaCambioDeUbicacion() {
         Assert.assertEquals("La Plata", vectorA.location!!.nombreDeLaUbicacion)
         service.mover(vectorA.id!!.toInt(), "Quilmes")
 
@@ -112,7 +115,7 @@ class UbicacionServiceTest {
         service.expandir("La Plata")
         val vectores: MutableList<Vector> = service.recuperar("La Plata").vectores.toMutableList()
         val totalDeInfectados = vectores.count { it.estaInfectado() }
-        Assert.assertEquals(3, totalDeInfectados)//ya reconoce strategia de todos pero no contagia
+        Assert.assertEquals(3, totalDeInfectados)
     }
 
     @Test
@@ -121,6 +124,11 @@ class UbicacionServiceTest {
         val vectores: MutableList<Vector> = service.recuperar("Quilmes").vectores.toMutableList()
         val totalDeInfectados = vectores.count { it.estaInfectado() }
         Assert.assertEquals(0, totalDeInfectados)
+    }
+
+    @Test
+    fun verificoElRetornoDeLas3EnfermedadesQuePadeceElVector(){
+        Assert.assertEquals(3, serviceVec.recuperarVector(vectorD.id!!.toInt()).enfermedades.size)
     }
 
     @After

@@ -27,17 +27,15 @@ class VectorServiceTest {
     lateinit var vectorB: Vector
     lateinit var vectorC: Vector
     lateinit var vectorD: Vector
-    lateinit var vectorARecuperado: Vector
-    lateinit var vectorBRecuperado: Vector
-    lateinit var vectorCRecuperado: Vector
-    lateinit var vectorDRecuperado: Vector
+    lateinit var vectorE: Vector
     lateinit var vectores: MutableList<Vector>
-    lateinit var especie1: Especie
-    lateinit var especie2: Especie
-    lateinit var especie3: Especie
     lateinit var estrategia: StrategyHumano
     lateinit var estrategia1: StrategyAnimal
     lateinit var patogeno: Patogeno
+    lateinit var mosquito: Especie
+    lateinit var covid19: Especie
+    lateinit var gripeAviar: Especie
+    lateinit var ubicacion1: Ubicacion
 
 
     @Before
@@ -48,27 +46,28 @@ class VectorServiceTest {
         serviceVect.clear()
         estrategia = StrategyHumano()
         estrategia1 = StrategyAnimal()
-        patogeno = Patogeno("Virus", 80, 80, 80)
-        val id = servicePatog.crearPatogeno(patogeno)
+        val id = servicePatog.crearPatogeno(Patogeno("Virus", 80, 80, 80))
         patogeno = servicePatog.recuperarPatogeno(id)
-        especie1 = patogeno.agregarEspecie("Dengue", "Argentina", 15)
-        val mosquito = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Dengue", "Argentina", 15)
-        val ubicacion1 = serviceUbic.crearUbicacion("Argentina")
-        vectorA = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
-        vectorB = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona)
-        vectorC = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
-        vectorD = Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal)
-        vectorA = serviceVect.crearVector(vectorA)
-        vectorB = serviceVect.crearVector(vectorB)
-        vectorC = serviceVect.crearVector(vectorC)
-        vectorD = serviceVect.crearVector(vectorD)
+        mosquito = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Dengue", "Argentina", 15)
+        covid19 = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "Coronavirus", "China", 55)
+        gripeAviar = servicePatog.agregarEspecie(patogeno.id!!.toInt(), "H5N1", "EEUU", 40)
+        ubicacion1 = serviceUbic.crearUbicacion("Argentina")
+        vectorA = serviceVect.crearVector(Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona))
+        vectorB = serviceVect.crearVector(Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Persona))
+        vectorC = serviceVect.crearVector(Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal))
+        vectorD = serviceVect.crearVector(Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal))
+        vectorE = serviceVect.crearVector(Vector(ubicacion1, VectorFrontendDTO.TipoDeVector.Animal))
         serviceVect.infectar(vectorA, mosquito)
-        vectorC.enfermedades.add(especie1)
+        serviceVect.infectar(vectorC, mosquito)
+        serviceVect.infectar(vectorE, mosquito)
+        serviceVect.infectar(vectorE, covid19)
+        serviceVect.infectar(vectorE, gripeAviar)
+
         vectores = ArrayList()
     }
 
     @Test
-    fun contagioExitoso() {
+    fun contagioExitosoPersonaAPersona() {
         vectores.add(vectorB)
         Assert.assertTrue(vectorB.enfermedades.isEmpty())
         serviceVect.contagiar(vectorA, vectores)
@@ -77,18 +76,40 @@ class VectorServiceTest {
     }
 
     @Test
-    fun contagioNoExitoso() {
+    fun contagioNoExitosoPersonaAAnimal() {
         vectores.add(vectorD)
         Assert.assertTrue(vectorD.enfermedades.isEmpty())
         serviceVect.contagiar(vectorC, vectores)
-        val vectorDRecuperadoPost = serviceVect.actualizar(vectorD)
+        val vectorDRecuperadoPost = serviceVect.recuperarVector(vectorD.id!!.toInt())
         Assert.assertEquals(0, vectorDRecuperadoPost.enfermedades.size)
+    }
+
+    @Test
+    fun infectarVectorSano() {
+        serviceVect.infectar(vectorD, covid19)
+        val vectorDRecuperadoPost = serviceVect.recuperarVector(vectorD.id!!.toInt())
+        Assert.assertEquals(1,vectorDRecuperadoPost.enfermedades.size )
+
+    }
+    @Test
+    fun infectarCon2EspecieAVectorConDengue() {
+        serviceVect.infectar(vectorA, covid19)
+        serviceVect.infectar(vectorA, gripeAviar)
+        val vectorDRecuperadoPost = serviceVect.recuperarVector(vectorA.id!!.toInt())
+        Assert.assertEquals(3,vectorDRecuperadoPost.enfermedades.size )
+
+    }
+
+    @Test
+    fun enfermedadesDelVector(){
+        val vectorERecuperadoPost = serviceVect.recuperarVector(vectorE.id!!.toInt())
+        Assert.assertEquals(3,vectorERecuperadoPost.enfermedades.size)
     }
 
     @After
     fun cleanup() {
         //Destroy cierra la session factory y fuerza a que, la proxima vez, una nueva tenga
         //que ser creada.
-        serviceVect.clear()
+ //       serviceVect.clear()
     }
 }
