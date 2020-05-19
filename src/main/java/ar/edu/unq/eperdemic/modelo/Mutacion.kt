@@ -9,20 +9,24 @@ class Mutacion() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null;
+    var id: Long? = null;
     var puntosAdnNecesarios: Int? = null
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "mutacionesHabilitadas", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var mutacionesNecesarias: MutableList<Mutacion> = mutableListOf()
+
+    @ManyToMany
+    var mutacionesHabilitadas: MutableList<Mutacion> = mutableListOf()
 
     @ManyToOne
     var owner: Especie? = null
 
     var potencialidad: Potencialidad? = null
 
-    constructor(puntos: Int, mutaciones: MutableList<Mutacion>, potencialidad: Potencialidad) : this() {
+    constructor(puntos: Int, mutacionesNecesarias: MutableList<Mutacion>, mutacionesHabilitadas: MutableList<Mutacion>, potencialidad: Potencialidad) : this() {
         this.puntosAdnNecesarios = puntos
-        this.mutacionesNecesarias = mutaciones
+        this.mutacionesNecesarias = mutacionesNecesarias
+        this.mutacionesHabilitadas = mutacionesHabilitadas
         this.potencialidad = potencialidad
     }
 
