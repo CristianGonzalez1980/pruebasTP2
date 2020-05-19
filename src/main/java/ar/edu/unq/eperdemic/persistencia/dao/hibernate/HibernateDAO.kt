@@ -1,6 +1,7 @@
 package ar.edu.unq.eperdemic.persistencia.dao.hibernate
 
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner
+import java.io.Serializable
 
 
 open class HibernateDAO<T>(private val entityType: Class<T>) {
