@@ -3,17 +3,19 @@ package ar.edu.unq.eperdemic.services.runner
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
+import ar.edu.unq.eperdemic.persistencia.dao.EspecieDAO
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.services.PatogenoService
 import ar.edu.unq.eperdemic.services.runner.TransactionRunner.runTrx
 
 class PatogenoServiceImp(
         private val patogenoDAO: PatogenoDAO,
+        private val especieDAO: EspecieDAO,
         private val dataDAO: DataDAO
 ) : PatogenoService {
 
     override fun recuperarEspecie(id: Int): Especie {
-        return kotlin.run { patogenoDAO.recuperarEspecie(id) }
+        return runTrx { especieDAO.recuperarEspecie(id) }
     }
 
     override fun esPandemia(especieId: Int): Boolean {

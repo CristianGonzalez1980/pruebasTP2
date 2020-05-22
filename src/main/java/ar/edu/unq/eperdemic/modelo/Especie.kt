@@ -21,6 +21,7 @@ class Especie() : Serializable {
 
     var adn: Int = 0  //Una especie obtendra 1 de ADN cada 5 personas infectadas, FALTA IMPLEMENTAR
 
+    @Column(nullable = false, length = 500)
     var countIncAdn: Int = 0
 
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
@@ -41,6 +42,7 @@ class Especie() : Serializable {
         if ((this.adn!! >= unaMutacion.getAdnNecesario()!!) && this.tieneMutaciones(unaMutacion.mutacionesNecesarias())) {
             this.adn = (this.adn!! - unaMutacion.getAdnNecesario()!!)
             this.mutaciones.add(unaMutacion)
+            unaMutacion.owner = this
             unaMutacion.potenciarEspecie(this)
         }
     }

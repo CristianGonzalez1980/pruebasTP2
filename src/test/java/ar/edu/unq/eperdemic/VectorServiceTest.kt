@@ -40,7 +40,7 @@ class VectorServiceTest {
 
     @Before
     fun crearModelo() {
-        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
+        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateEspecieDAO(), HibernateDataDAO())
         this.serviceVect = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())
         this.serviceUbic = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO()))
         serviceVect.clear()
@@ -110,6 +110,6 @@ class VectorServiceTest {
     fun cleanup() {
         //Destroy cierra la session factory y fuerza a que, la proxima vez, una nueva tenga
         //que ser creada.
- //       serviceVect.clear()
+       serviceVect.clear()
     }
 }

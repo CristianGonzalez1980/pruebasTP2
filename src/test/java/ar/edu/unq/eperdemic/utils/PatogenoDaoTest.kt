@@ -4,6 +4,7 @@ import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.DataDAO
 import ar.edu.unq.eperdemic.persistencia.dao.PatogenoDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateEspecieDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
 import ar.edu.unq.eperdemic.services.PatogenoService
 import ar.edu.unq.eperdemic.services.runner.PatogenoServiceImp
@@ -32,6 +33,7 @@ class PatogenoDaoTest {
     fun crearModelo() {
         this.service = PatogenoServiceImp(
                 HibernatePatogenoDAO(),
+                HibernateEspecieDAO(),
                 HibernateDataDAO()
         )
         service.crearPatogeno(Patogeno("Bacteria", 30, 50, 50))

@@ -49,7 +49,7 @@ class UbicacionServiceTest {
         this.service = UbicacionServiceImp(HibernateUbicacionDAO(),
                 HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO()))
         this.serviceVec = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())
-        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
+        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateEspecieDAO(), HibernateDataDAO())
 
         service.clear()
         //ubi1 = service.crearUbicacion("Bernal" )

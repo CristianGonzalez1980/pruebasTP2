@@ -22,7 +22,7 @@ import org.junit.Test
 
 class DataServiceImp(private val dataDAO: DataDAO) : DataService {
     override fun crearSetDeDatosIniciales() {
-        val patservice: PatogenoService = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
+        val patservice: PatogenoService = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateEspecieDAO(), HibernateDataDAO())
         val vecservice: VectorService = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())
         val ubiservice: UbicacionService = UbicacionServiceImp(HibernateUbicacionDAO(), HibernateDataDAO(), HibernateVectorDAO(), vecservice as VectorServiceImp)
         val idpatogeno = patservice.crearPatogeno(Patogeno("Virus", 50, 50, 50))

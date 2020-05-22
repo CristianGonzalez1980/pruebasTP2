@@ -23,10 +23,10 @@ class Mutacion() {
 
     var potencialidad: Potencialidad? = null
 
-    constructor(puntos: Int, mutacionesNecesarias: MutableList<Mutacion>, mutacionesHabilitadas: MutableList<Mutacion>, potencialidad: Potencialidad) : this() {
+    constructor(puntos: Int, mutacionesNecesarias: MutableList<Mutacion>, potencialidad: Potencialidad) : this() {
         this.puntosAdnNecesarios = puntos
         this.mutacionesNecesarias = mutacionesNecesarias
-        this.mutacionesHabilitadas = mutacionesHabilitadas
+        this.initMutacionesQueLaHabitan(mutacionesNecesarias)
         this.potencialidad = potencialidad
     }
 
@@ -37,7 +37,11 @@ class Mutacion() {
     fun mutacionesNecesarias(): List<Mutacion> {
         return (this.mutacionesNecesarias)
     }
-
+    fun initMutacionesQueLaHabitan(mutacionesNecesarias: MutableList<Mutacion>) {
+        for (mutacion in mutacionesNecesarias) {
+            mutacion.mutacionesHabilitadas.add(this)
+        }
+    }
     fun potenciarEspecie(especie: Especie) {
 
         if (this.potencialidad!!.name == "Contagio") {
@@ -52,5 +56,4 @@ class Mutacion() {
             especie.owner!!.incrementarLetalidal()
         }
     }
-
 }

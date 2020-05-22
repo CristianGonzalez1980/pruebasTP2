@@ -13,6 +13,7 @@ import ar.edu.unq.eperdemic.services.runner.UbicacionServiceImp
 import ar.edu.unq.eperdemic.services.runner.VectorServiceImp
 import ar.edu.unq.eperdemic.utils.DataService
 import ar.edu.unq.eperdemic.utils.Impl.DataServiceImp
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -52,7 +53,7 @@ class EstadisticaServiceTest {
         this.serviceUbi = UbicacionServiceImp(HibernateUbicacionDAO(),
                 HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO()))
         this.serviceVec = VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())
-        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateDataDAO())
+        this.servicePatog = PatogenoServiceImp(HibernatePatogenoDAO(), HibernateEspecieDAO(), HibernateDataDAO())
         this.serviceData = DataServiceImp(HibernateDataDAO())
         this.serviceEst = EstadisticaServiceImp(HibernateEspecieDAO(), HibernateUbicacionDAO(), UbicacionServiceImp(HibernateUbicacionDAO(),
                 HibernateDataDAO(), HibernateVectorDAO(), VectorServiceImp(HibernateVectorDAO(), HibernateDataDAO(), HibernateEspecieDAO())))
@@ -204,6 +205,12 @@ class EstadisticaServiceTest {
         Assert.assertEquals(serviceEst.reporteDeContagios("Bernal").vectoresPresentes, vectoresPresente.size)
         Assert.assertEquals(serviceEst.reporteDeContagios("Bernal").vectoresInfecatods, vectoresInfectados.size)
         Assert.assertEquals(serviceEst.reporteDeContagios("Bernal").nombreDeEspecieMasInfecciosa, especieLider.nombre)
+    }
 
+    @After
+    fun cleanup() {
+        serviceData.eliminarTodo()
+        //Destroy cierra la session factory y fuerza a que, la proxima vez, una nueva tenga
+        //que ser creada.
     }
 }

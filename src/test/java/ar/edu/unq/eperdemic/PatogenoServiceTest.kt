@@ -3,6 +3,7 @@ package ar.edu.unq.eperdemic
 import ar.edu.unq.eperdemic.modelo.Especie
 import ar.edu.unq.eperdemic.modelo.Patogeno
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateDataDAO
+import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernateEspecieDAO
 import ar.edu.unq.eperdemic.persistencia.dao.hibernate.HibernatePatogenoDAO
 import ar.edu.unq.eperdemic.services.PatogenoService
 import ar.edu.unq.eperdemic.services.runner.PatogenoServiceImp
@@ -23,6 +24,7 @@ class PatogenoServiceTest {
     fun crearModelo() {
         this.service = PatogenoServiceImp(
                 HibernatePatogenoDAO(),
+                HibernateEspecieDAO(),
                 HibernateDataDAO()
         )
     }
